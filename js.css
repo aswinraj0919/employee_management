@@ -1,0 +1,178 @@
+* {
+    margin: 0;
+    font-family: Poppins;
+    padding: 0;
+}
+
+:root {
+    --primarytextcolor: #fff;
+    --primarycolore: #4318FF;
+    --backgroundcolor: #c4d6ff;
+}
+
+.page {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    height: 100vh;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 0;
+}
+
+.main_menu h5 {
+    display: flex;
+    flex-direction: column;
+    color: var(--primarytextcolor);
+    padding: 20px 30px;
+}
+
+
+.menu_bar ul {
+    list-style: none;
+    padding: 20px 10px;
+}
+
+.main_menu ul li {
+    padding: 10px 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.menu_bar ul li a {
+    text-decoration: none;
+    color: var(--primarytextcolor)
+}
+
+.side_bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(149.96deg, #301F81 12.51%, #0F0441 89.53%);
+}
+
+.main_foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.main_foot h6 {
+    color: var(--primarytextcolor);
+    padding: 30px 0 30px 20px;
+}
+
+.main_menu ul li:nth-child(1)::before {
+    content: '\e88a';
+    font-family: Material Symbols Outlined;
+    color: var(--primarytextcolor);
+}
+
+.main_menu ul li:nth-child(2)::before {
+    content: '\e26b';
+    font-family: Material Symbols Outlined;
+    color: var(--primarytextcolor);
+}
+
+.main_menu ul li:nth-child(3)::before {
+    content: '\e7fd';
+    font-family: Material Symbols Outlined;
+    color: var(--primarytextcolor);
+}
+
+.main_menu ul li:nth-child(4)::before {
+    content: '\e897';
+    font-family: Material Symbols Outlined;
+    color: var(--primarytextcolor);
+}
+
+.main_menu ul li:hover {
+    background: #FFFFFF21;
+    border-radius: 15px;
+}
+
+.divider::before {
+    content: "";
+    display: flex;
+    border: 1px solid #FFFFFF2B
+}
+
+.main_bar {
+    padding: 20px;
+    background-color: var(--backgroundcolor);
+}
+
+.search_section {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    border-radius: 50px;
+    background-color: var(--primarytextcolor);
+}
+
+form::before {
+    content: '\e8b6';
+    font-family: Material Symbols Outlined;
+    font-size: 24px;
+}
+
+input {
+    border: none;
+    background-color: var(--primarycolore);
+}
+
+form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 50px;
+    padding: 5px;
+    background-color: var(--primarycolore);
+}
+
+.profile_img::before {
+    content: '\e7f4';
+    font-family: Material Symbols Outlined;
+    font-size: 24px;
+}
+
+.profile_img img {
+    border-radius: 50px;
+}
+
+.profile_img {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.main_bar_top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.details {
+    background-color: var(--primarytextcolor);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.details_top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn.filled_btn {
+    background-color: var(--primarycolore);
+    color: #fff;
+    border: 1px;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+
