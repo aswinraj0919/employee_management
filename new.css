@@ -311,21 +311,7 @@ tbody span:hover {
     padding: 10px;
 }
 
-#add_employee {
-    display: none;
-}
 
-#add_head {
-    display: none;
-}
-
-#edit_head {
-    display: none;
-}
-
-#save_change {
-    display: none;
-}
 
 
 #deleat_emplayee {
