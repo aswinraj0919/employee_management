@@ -32,6 +32,9 @@ function openview(id) {
             document.getElementById('view_pin').innerHTML = data.pin
             document.getElementById('view_dob').innerHTML = data.dob
 
+
+
+            
         })
 }
 
