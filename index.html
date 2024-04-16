@@ -52,23 +52,30 @@
                                 <h6>Dashboard / Employees</h6>
                                 <h3>Employees</h3>
                             </div>
-                            <div class="search_section">
-                                <form>
-                                    <div class="search"></div>
-                                    <input type="text" placeholder="Search..">
-                                </form>
-                                <span class="material-symbols-outlined">
-                                    notifications
-                                </span>
-                                <div class="profile_img">
-                                    <img src="Elipse 5.png" alt="profile">
-                                </div>
+                            <div class="tab_filter_container">
+                                <input type="text" id="tab_filter_text">
+                                <button id="tab_filter_btn">filte</button>
                             </div>
                         </div>
                         <div class="p-2">
                             <div class="details">
                                 <div class="details_top">
-                                    <h3>Employees List</h3>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <h3>Employees List</h3>
+                                        <div class="tab_head_container">
+                                            <div class="page_limit">
+                                                <span> Shows </span>
+                                                <select id="table_size">
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="20">20</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>
+                                                <span> entries</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <button type="button" class="btn filled_btn"
                                         onclick="openForm()">AddEmployee</button>
                                 </div>
@@ -91,21 +98,12 @@
                         </div>
                     </div>
                     <div>
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link">1</a></li>
-                                <li class="page-item"><a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link">1</a></li>
-                                <li class="page-item"><a class="page-link">2</a></li>
-                                <li class="page-item"><a class="page-link">3</a></li>
-                                <li class="page-item"><a class="page-link">...</a></li>
-                                <li class="page-item"><a class="page-link">10</a></li>
-                                <li class="page-item"><a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link">1</a></li>
-                            </ul>
-                        </nav>
+                        <div>
+                            <div class="footer ">
+                                <span>Showing 1 to 10 of entries</span>
+                                <div class="index_buttons"></div>
+                            </div>
+                        </div>
                         <div class="foot_line">
                             <div class="foot">
                                 <h6>© 2023 All Rights Reserved. Stackup</h6>
@@ -295,12 +293,12 @@
 
                 </div>
             </div>
-           
+
             <div id="overlay" onclick="overla()"></div>
         </div>
     </section>
-    <script src="java.js">
-    </script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="java.js"></script>
 </body>
 
 </html>

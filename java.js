@@ -1,50 +1,4 @@
 
-fetch("http://localhost:3000/employees")
-    .then((data) => {
-        return data.json();
-    })
-    .then((empData) => {
-        console.log(empData);
-        let s = 0;
-        let tabledata = "";
-        empData.map((values) => {
-            tabledata += `<tr>
-        <th>#${++s}</th>
-        <td>${values.salutation} ${values.firstName} ${values.lastName}</td>
-        <td>${values.email}</td>
-        <td>${values.phone}</td>
-        <td>${values.gender}</td>
-        <td>${values.dob}</td>
-        <td>${values.country}</td>
-        <td> 
-        <nav class="edit"> 
-        <input type="checkbox" id="edit_dropdown">
-        <a  class="options"><label for="edit_dropdown"><span
-         class="material-symbols-outlined">
-          more_horiz
-          </span></label></a>
-          <div class="dropdown">
-          <ul>
-           <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
-           <li><a onclick="openedit('${values.id}')">Edit</a></li>
-            <li><a onclick="opendelete('${values.id}')">Delete</a></li>
-            </ul>
-            </div>
-            </nav>
-  </td>
-    </tr>`
-        });
-        document.getElementById("tbody_table").innerHTML = tabledata;
-    })
-
-
-
-
-
-
-
-
-
 // add element
 
 
@@ -329,3 +283,170 @@ function confirmDelete(id) {
 
 
 
+// pagenation
+
+
+var array_length = 0;
+var table_size = 1;
+var start_index = 1;
+var end_index = 0;
+var current_index = 1;
+var max_index = 0;
+
+let rank = [];
+
+fetchData();
+function fetchData() {
+    fetch("http://localhost:3000/employees")
+        .then((data) => {
+            console.log(data);
+            return data.json();
+        })
+        .then((empData) => {
+            rank = empData;
+            console.log(rank);
+            // const size=empData.length
+            // displayIndexButtons(size)
+            const len = empData
+            displayIndexButtons(len)
+        })
+
+
+}
+
+
+
+function preLoadCalculation() {
+    // filterRankList();
+    array_length = rank.length;
+    console.log("array length asw" + array_length);
+    max_index = array_length / table_size;
+    if ((array_length % table_size) > 0) {
+        max_index++;
+    }
+
+
+}
+// function filterRankList() {
+//     let tab_filter_text = $("#tab_filter_text").val();
+//     if (tab_filter_text != '') {
+//         let temp_array = rank.filter(function (object) {
+//             return object.gender.toUpperCase().includes(tab_filter_text.toUpperCase())
+//             object.email.toUpperCase().includes(tab_filter_text.toUpperCase())
+//             object.lastName.toUpperCase().includes(tab_filter_text.toUpperCase())
+//             object.username.toUpperCase().includes(tab_filter_text.toUpperCase())
+//             object.dob.toString().includes(tab_filter_text)
+
+//         });
+//         rank = temp_array;
+//     } else {
+//         array = rank;
+//     }
+// }
+
+
+function displayIndexButtons(len) {
+    preLoadCalculation();
+    $(".index_buttons button").remove();
+    $(".index_buttons ").append('<button onclick="prev();"><<</button>');
+    for (var i = 1; i <= max_index; i++) {
+        $(".index_buttons ").append('<button onclick="indexPagenation(' + i + ');" index="' + i + '">' + i + '</button>');
+    }
+    $(".index_buttons ").append('<button onclick="next();">>></button>');
+    highlightIndexButton(rank);
+}
+
+
+
+function highlightIndexButton(len) {
+    start_index = ((current_index - 1) * table_size) + 1;
+    end_index = (start_index + table_size) - 1;
+    if (end_index > array_length) {
+        end_index = array_length;
+    }
+    $(".footer span").text('Showing' + start_index + ' to ' + end_index + ' of ' + array_length + ' entries');
+    $(".index-buttons button").removeClass('active');
+    $(".index_buttons button[index='" + current_index + "']").addClass('active');
+
+    displayTablerows(len);
+}
+
+function displayTablerows(len) {
+
+    let as = rank.slice((start_index - 1), end_index)
+    console.log(start_index);
+    console.log(end_index);
+    let s = start_index;
+    let tabledata = "";
+    as.map((values) => {
+        tabledata += `<tr>
+        <th>#${s++}</th>
+        <td>${values.salutation} ${values.firstName} ${values.lastName}</td>
+        <td>${values.email}</td>
+        <td>${values.phone}</td>
+        <td>${values.gender}</td>
+        <td>${values.dob}</td>
+        <td>${values.country}</td>
+        <td> 
+            <nav class="edit"> 
+                <input type="checkbox" id="edit_dropdown">
+                    <a  class="options">
+                        <label for="edit_dropdown">
+                            <span class="material-symbols-outlined">
+                            more_horiz
+                            </span>
+                        </label>
+                    </a>
+                <div class="dropdown">
+                    <ul>
+                        <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
+                        <li><a onclick="openedit('${values.id}')">Edit</a></li>
+                        <li><a onclick="opendelete('${values.id}')">Delete</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </td>
+        </tr>`
+    });
+
+    document.getElementById("tbody_table").innerHTML = tabledata;
+
+}
+
+
+// displayIndexButtons();
+function next() {
+    if (current_index < 1) {
+        current_index++;
+        highlightIndexButton();
+    }
+}
+
+
+function prev() {
+    if (current_index > 1) {
+        current_index--;
+        highlightIndexButton();
+    }
+}
+
+
+function indexPagenation(index) {
+    current_index = parseInt(index);
+    highlightIndexButton();
+
+}
+
+
+$("#table_size").change(function () {
+    table_size = parseInt($(this).val());
+    current_index = 1;
+    start_index = 1;
+    displayIndexButtons();
+})
+
+$("#tab_filter_btn").click(function () {
+    current_index = 1;
+    start_index = 1;
+    displayIndexButtons();
+})

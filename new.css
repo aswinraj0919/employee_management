@@ -120,12 +120,7 @@
     background-color: var(--primarytextcolor);
 }
 
-.pagination {
-    justify-content: end;
-    gap: 5px;
-    margin: 0;
-    padding: 10px;
-}
+
 
 .search_section form::before {
     content: '\e8b6';
@@ -304,7 +299,7 @@ tbody span:hover {
 #newEmployee {
     visibility: hidden;
     position: absolute;
-    top: calc(50% - 355px);
+    bottom:-300px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -317,7 +312,7 @@ tbody span:hover {
 #deleat_emplayee {
     visibility: hidden;
     position: absolute;
-    top: calc(50% - 100px);
+    bottom: calc(10% - 100px);
     left: calc(50% - 250px);
     display: flex;
     padding: 20px;
@@ -347,7 +342,7 @@ tbody span:hover {
     justify-content: end;
 }
 
-.dlt_btn a .filled_btn {
+.dlt_btn a .filled_btn { 
     padding: 10px 20px;
 }
 

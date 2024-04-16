@@ -34,7 +34,7 @@ function openview(id) {
 
 
 
-            
+
         })
 }
 
@@ -217,10 +217,6 @@ function opendelete(id) {
     let back = document.getElementById('overlay')
     back.style.display = "unset";
 
-    let dlt = document.getElementById('delete')
-    dlt.addEventListener("click", () => {
-        confirmDelete(id);
-    })
 }
 function confirmDelete(id) {
     fetch(`http://localhost:3000/employees/${id}`, {
