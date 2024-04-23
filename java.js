@@ -15,6 +15,54 @@ function openForm() {
     edithead.style.display = "none";
     let back = document.getElementById('overlay')
     back.style.display = "unset";
+    let uplod = document.getElementById('upload')
+    uplod.style.display = "block";
+    let change = document.getElementById('change_avatar')
+    change.style.display = "none";
+    let cng_btn = document.getElementById('change_btn')
+    cng_btn.style.display = "none";
+
+    clearInput()
+
+}
+
+function clearInput() {
+    document.getElementById("add_select").value = 'select';
+    document.getElementById("add_firstName").value = "";
+    document.getElementById("add_secondName").value = "";
+    document.getElementById("add_email").value = "";
+    document.getElementById("add_number").value = "";
+    document.getElementById("add_dob").value = "";
+    const radioButtons = document.querySelectorAll('input[name="add_gender"]');
+    document.getElementById("add_username").value = "";
+    document.getElementById("add_password").value = "";
+    document.getElementById("add_qualification").value = "";
+    document.getElementById("add_address").value = "";
+    document.getElementById("add_country").value = "select";
+    document.getElementById("add_State").value = "select";
+    document.getElementById("add_city").value = "";
+    document.getElementById("add_pin").value = "";
+
+    radioButtons.forEach(function (radioButton) {
+        radioButton.checked = false;
+    });
+
+    document.getElementById("erroradd_dob").textContent = "";
+    document.getElementById("erroradd_gender").textContent = "";
+    document.getElementById("erroradd_number").textContent = "";
+    document.getElementById("erroradd_email").textContent = "";
+    document.getElementById("erroradd_firstName").textContent = "";
+    document.getElementById("erroradd_secondName").textContent = "";
+    document.getElementById("erroradd_password").textContent = "";
+    document.getElementById("erroradd_select").textContent = "";
+    document.getElementById("erroradd_username").textContent = "";
+    document.getElementById("erroradd_address").textContent = "";
+    document.getElementById("erroradd_qualification").textContent = "";
+    document.getElementById("erroradd_country").textContent = "";
+    document.getElementById("erroradd_State").textContent = "";
+    document.getElementById("erroradd_city").textContent = "";
+    document.getElementById("erroradd_pin").textContent = "";
+
 }
 
 function overla() {
@@ -33,8 +81,18 @@ function closetag() {
     variable.style.visibility = "hidden";
     let back = document.getElementById('overlay')
     back.style.display = "none";
+    let uplod = document.getElementById('upload')
+    uplod.style.display = "none";
 
 }
+
+const finishValidation = document.getElementById('add_employee')
+finishValidation.addEventListener('click', () => {
+    const validations = addFormValidation()
+    
+})
+
+
 
 function addEmployee() {
     const salutation = document.getElementById("add_select").value;
@@ -82,8 +140,31 @@ function addEmployee() {
 
 
 
-
 }
+
+document.getElementById('imgInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const imageSrc = e.target.result;
+            const imageElement = document.createElement('img');
+            imageElement.src = imageSrc;
+
+            const add_avatar = document.getElementById('add_avatar');
+            add_avatar.innerHTML = ''; // Clear previous image, if any
+            add_avatar.appendChild(imageElement);
+        }
+
+        reader.readAsDataURL(file);
+    }
+    let uplod = document.getElementById('upload')
+    uplod.style.display = "none";
+    let div_add_img = document.getElementById('div_add_img')
+    div_add_img.style.display = "flex";
+});
 
 function postData(newData) {
     fetch('http://localhost:3000/employees', {
@@ -98,6 +179,16 @@ function postData(newData) {
         })
         .then(data => {
             console.log("Data posted successfully", data);
+
+            const imgUplode = document.getElementById('imgInput');
+            let imgObject = new FormData();
+
+            imgObject.append("avatar", imgUplode.files[0]);
+
+            fetch(`http://localhost:3000/employees/${data.id}/avatar`, {
+                method: "POST",
+                body: imgObject,
+            });
         })
 }
 
@@ -124,13 +215,47 @@ function openedit(id) {
     addhead.style.display = "none";
     let back = document.getElementById('overlay')
     back.style.display = "unset";
-
+    let uplod = document.getElementById('upload')
+    uplod.style.display = "none";
+    let change = document.getElementById('change_avatar')
+    change.style.display = "block";
+    let cng_btn = document.getElementById('change_btn')
+    cng_btn.style.display = "block";
+    let div_add_img = document.getElementById('div_add_img')
+    div_add_img.style.display = "none";
 
     editGet(id);
+    clearBugOnEdit()
+}
+
+function clearBugOnEdit(){
+    document.getElementById("erroradd_dob").textContent = "";
+    document.getElementById("erroradd_gender").textContent = "";
+    document.getElementById("erroradd_number").textContent = "";
+    document.getElementById("erroradd_email").textContent = "";
+    document.getElementById("erroradd_firstName").textContent = "";
+    document.getElementById("erroradd_secondName").textContent = "";
+    document.getElementById("erroradd_password").textContent = "";
+    document.getElementById("erroradd_select").textContent = "";
+    document.getElementById("erroradd_username").textContent = "";
+    document.getElementById("erroradd_address").textContent = "";
+    document.getElementById("erroradd_qualification").textContent = "";
+    document.getElementById("erroradd_country").textContent = "";
+    document.getElementById("erroradd_State").textContent = "";
+    document.getElementById("erroradd_city").textContent = "";
+    document.getElementById("erroradd_pin").textContent = "";
+}
+
+
+function img_change() {
+    const clickToChange = document.getElementById('change_avatar')
+    clickToChange.src = URL.createObjectURL(event.target.files[0]);
 }
 
 function editGet(id) {
     console.log(id);
+
+
 
     fetch(`http://localhost:3000/employees/${id}`, {
         method: 'GET',
@@ -141,6 +266,9 @@ function editGet(id) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+
+            var editImgPreview = document.getElementById('change_avatar')
+            editImgPreview.src = `http://localhost:3000/employees/${data.id}/avatar`;
 
             document.getElementById("add_select").value = data.salutation
             document.getElementById('add_firstName').value = data.firstName
@@ -165,12 +293,29 @@ function editGet(id) {
             document.getElementById('add_dob').value = reversedDate
 
 
-            let submit = document.getElementById('save_change')
-            submit.addEventListener("click", () => {
-                saveChanges(id);
+            // let submit = document.getElementById('save_change')
+            // submit.addEventListener("click", () => {
+            //     saveChanges(id);
+            // })
+            const finishValidationedit = document.getElementById('save_change')
+            finishValidationedit.addEventListener('click', () => {
+                const validations = addFormValidation()
+                if (!validations) {
+                    return;
+                }
+                else {
+                    saveChanges(id)
+                }
             })
+
         })
+
 }
+
+
+
+
+
 
 function saveChanges(id) {
     const salutation = document.getElementById("add_select").value;
@@ -228,6 +373,17 @@ function saveChanges(id) {
         })
         .then(data => {
             console.log("Data posted successfully", data);
+
+            const imgUplode = document.getElementById('change');
+            let imgObject = new FormData();
+
+            imgObject.append("avatar", imgUplode.files[0]);
+
+            fetch(`http://localhost:3000/employees/${id}/avatar`, {
+                method: "POST",
+                body: imgObject,
+            });
+
         })
 
 
@@ -287,7 +443,7 @@ function confirmDelete(id) {
 
 
 var array_length = 0;
-var table_size = 1;
+var table_size = 5;
 var start_index = 1;
 var end_index = 0;
 var current_index = 1;
@@ -305,8 +461,6 @@ function fetchData() {
         .then((empData) => {
             rank = empData;
             console.log(rank);
-            // const size=empData.length
-            // displayIndexButtons(size)
             const len = empData
             displayIndexButtons(len)
         })
@@ -317,9 +471,8 @@ function fetchData() {
 
 
 function preLoadCalculation() {
-    // filterRankList();
     array_length = rank.length;
-    console.log("array length asw" + array_length);
+    console.log("array length " + array_length);
     max_index = array_length / table_size;
     if ((array_length % table_size) > 0) {
         max_index++;
@@ -327,22 +480,6 @@ function preLoadCalculation() {
 
 
 }
-// function filterRankList() {
-//     let tab_filter_text = $("#tab_filter_text").val();
-//     if (tab_filter_text != '') {
-//         let temp_array = rank.filter(function (object) {
-//             return object.gender.toUpperCase().includes(tab_filter_text.toUpperCase())
-//             object.email.toUpperCase().includes(tab_filter_text.toUpperCase())
-//             object.lastName.toUpperCase().includes(tab_filter_text.toUpperCase())
-//             object.username.toUpperCase().includes(tab_filter_text.toUpperCase())
-//             object.dob.toString().includes(tab_filter_text)
-
-//         });
-//         rank = temp_array;
-//     } else {
-//         array = rank;
-//     }
-// }
 
 
 function displayIndexButtons(len) {
@@ -364,24 +501,64 @@ function highlightIndexButton(len) {
     if (end_index > array_length) {
         end_index = array_length;
     }
-    $(".footer span").text('Showing' + start_index + ' to ' + end_index + ' of ' + array_length + ' entries');
+    $(".page_limit span").text('of  ' + array_length);
     $(".index-buttons button").removeClass('active');
     $(".index_buttons button[index='" + current_index + "']").addClass('active');
 
     displayTablerows(len);
 }
 
+const input = document.getElementById('filter_text')
+input.addEventListener('input', () => {
+    displayTablerows(current_index)
+});
+
 function displayTablerows(len) {
+
+    let qurry = input.value;
+    console.log("qurry : ", qurry);
+
 
     let as = rank.slice((start_index - 1), end_index)
     console.log(start_index);
     console.log(end_index);
     let s = start_index;
     let tabledata = "";
-    as.map((values) => {
+
+
+    as.filter((eventData) => {
+        if (qurry === '') {
+            return eventData
+        }
+        else if (eventData.salutation.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.firstName.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.lastName.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.email.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.phone.includes(qurry)) {
+            return eventData
+        }
+        else if (eventData.gender.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.dob.includes(qurry)) {
+            return eventData
+        }
+        else if (eventData.country.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+    }).map((values) => {
         tabledata += `<tr>
         <th>#${s++}</th>
-        <td>${values.salutation} ${values.firstName} ${values.lastName}</td>
+        <td><img class="view_avatar" src="http://localhost:3000/employees/${values.id}/avatar" >
+        ${values.salutation} ${values.firstName} ${values.lastName}</td>
         <td>${values.email}</td>
         <td>${values.phone}</td>
         <td>${values.gender}</td>
@@ -414,7 +591,6 @@ function displayTablerows(len) {
 }
 
 
-// displayIndexButtons();
 function next() {
     if (current_index < 1) {
         current_index++;
@@ -450,3 +626,144 @@ $("#tab_filter_btn").click(function () {
     start_index = 1;
     displayIndexButtons();
 })
+
+
+// validation
+
+function addFormValidation() {
+    const salutation = document.getElementById("add_select").value.trim();
+    const firstName = document.getElementById("add_firstName").value.trim();
+    const lastName = document.getElementById("add_secondName").value.trim();
+    const email = document.getElementById("add_email").value.trim();
+    const phone = document.getElementById("add_number").value.trim();
+    const address = document.getElementById("add_address").value.trim();
+    const country = document.getElementById("add_country").value.trim();
+    const state = document.getElementById("add_State").value.trim();
+    const city = document.getElementById("add_city").value.trim();
+    const pin = document.getElementById("add_pin").value.trim();
+    const username = document.getElementById("add_username").value.trim();
+    const password = document.getElementById("add_password").value.trim();
+    const qualifications = document.getElementById("add_qualification").value.trim();
+
+    // DOB
+
+    const dob = document.getElementById("add_dob")
+    const addDovValidation = document.getElementById('erroradd_dob')
+    const dobvalue = dob.value.trim();
+
+    const gender = document.querySelector('input[name="add_gender"]:checked')
+    const addGenderValidation = document.getElementById('erroradd_gender')
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const phonePattern = /^\d{10}$/
+    const namePattern = /^[A-Za-z]+$/
+
+    let isValid = true;
+
+    // validating DOB and Gender
+
+    if (gender) {
+        addGenderValidation.textContent = ""
+
+    }
+    else {
+        addGenderValidation.textContent = "* please select gender"
+        isValid = false
+    }
+
+    if (dobvalue === "") {
+        addDovValidation.textContent = "* please select Date of Birth"
+        isValid = false
+    }
+
+    // validating rest
+
+    if (!phonePattern.test(phone)) {
+        document.getElementById('erroradd_number').textContent = "* phone number should contain 10n digits"
+        isValid = false
+    }
+
+    if (!emailPattern.test(email)) {
+        document.getElementById('erroradd_email').textContent = "* Invalid email"
+        isValid = false
+    }
+
+    if (!namePattern.test(firstName)) {
+        document.getElementById('erroradd_firstName').textContent = "* please enter first name"
+        isValid = false
+    }
+
+    if (!namePattern.test(lastName)) {
+        document.getElementById('erroradd_secondName').textContent = "* please enter last name"
+        isValid = false
+    }
+
+    if (password == "") {
+        document.getElementById('erroradd_password').textContent = "* please enter password"
+        isValid = false
+    }
+
+    if (salutation == "" || salutation == "select") {
+        document.getElementById('erroradd_select').textContent = "* saluration is needed"
+    }
+
+    if (username == "") {
+        document.getElementById('erroradd_username').textContent = "* username is needed"
+    }
+
+    if (address == "") {
+        document.getElementById('erroradd_address').textContent = "* address is needed"
+    }
+
+    if (qualifications == "") {
+        document.getElementById('erroradd_qualification').textContent = "* qualification is needed"
+
+    }
+
+    if (country == "" || country == "select") {
+        document.getElementById('erroradd_country').textContent = "* country is needed"
+    }
+
+    if (state == "" || state == "select") {
+        document.getElementById('erroradd_State').textContent = "* state is needed"
+    }
+
+    if (city == "" || city == "select") {
+        document.getElementById('erroradd_city').textContent = "* city is needed"
+    }
+
+    if (pin == "") {
+        document.getElementById('erroradd_pin').textContent = "* pin is needed"
+    }
+
+    // validation text event
+
+    document.getElementById('newEmployee').addEventListener('input', (event) => {
+        inputId = event.target.id;
+        const errorId = `error${inputId}`;
+        console.log("error id is ", errorId);
+        document.getElementById(errorId).textContent = "";
+    })
+
+    // gender validation
+
+    const male = document.getElementById("editMale")
+    const female = document.getElementById("editFemale")
+    const others = document.getElementById("editothers")
+
+
+    male.addEventListener("click", () => {
+        document.getElementById("editGenderError").textContent = "";
+    })
+
+    female.addEventListener("click", () => {
+        document.getElementById("editGenderError").textContent = "";
+    })
+
+    others.addEventListener("click", () => {
+        document.getElementById("editGenderError").textContent = "";
+    })
+
+    return isValid;
+}
+

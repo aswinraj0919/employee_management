@@ -32,7 +32,7 @@
                                 <ul>
                                     <li><a href="">Dashboard</a></li>
                                     <li><a href="">Employees</a></li>
-                                    <li><a href="">My Profile</a></li>
+                                    <li><a href="my_profil.html">My Profile</a></li>
                                     <li><a href="">Logout</a></li>
                                 </ul>
                             </nav>
@@ -41,7 +41,8 @@
                     <div class="divider">
                         <div class="main_foot">
                             <h6>Powered by</h6>
-                            <img src="image 1.png" alt="stackup logo">
+                            <a href="https://www.stackuplearning.com/" target="_blank">
+                                <img src="image 1.png" alt="stackup logo"></a>
                         </div>
                     </div>
                 </div>
@@ -52,9 +53,18 @@
                                 <h6>Dashboard / Employees</h6>
                                 <h3>Employees</h3>
                             </div>
-                            <div class="tab_filter_container">
-                                <input type="text" id="tab_filter_text">
-                                <button id="tab_filter_btn">filte</button>
+                            <div class="search_section">
+                                <form>
+                                    <div class="search"></div>
+                                    <input type="text" placeholder="Search.." id="filter_text">
+                                </form>
+                                <span class="material-symbols-outlined">
+                                    notifications
+                                </span>
+                                <div class="profile_img">
+                                    <a href="my_profil.html">
+                                        <img src="338363.jpg" alt="profile"></a>
+                                </div>
                             </div>
                         </div>
                         <div class="p-2">
@@ -64,7 +74,6 @@
                                         <h3>Employees List</h3>
                                         <div class="tab_head_container">
                                             <div class="page_limit">
-                                                <span> Shows </span>
                                                 <select id="table_size">
                                                     <option value="5">5</option>
                                                     <option value="10">10</option>
@@ -72,7 +81,7 @@
                                                     <option value="50">50</option>
                                                     <option value="100">100</option>
                                                 </select>
-                                                <span> entries</span>
+                                                <span></span>
                                             </div>
                                         </div>
                                     </div>
@@ -100,7 +109,6 @@
                     <div>
                         <div>
                             <div class="footer ">
-                                <span>Showing 1 to 10 of entries</span>
                                 <div class="index_buttons"></div>
                             </div>
                         </div>
@@ -134,32 +142,47 @@
                             </span>
 
                         </header>
-                        <div class="upload text-center my-2 py-3 rounded-3 bg-light mb-4">
-                            <label for="exampleInputfile">
+                        <input type="file" class="form-control rounded-4 file" id="imgInput">
+                        <label for="imgInput">
+                            <div id="div_add_img">
+                                <div id="add_avatar"></div>
+                                <label for="imgInput" id="add_avatar_btn" class="btn filled_btn">change</label>
+                            </div>
+                            <div class="text-center my-2 py-3 rounded-3 bg-light mb-4" id="upload">
                                 <i class="fa-solid fa-upload"></i>
-                                <input type="file" class="form-control rounded-4 file" id="exampleInputfile">
                                 <h6>Upload Image</h6>
                                 <p>png/jpg files are allowed</p>
-                            </label>
-                        </div>
+                            </div>
+                        </label>
+
+                        <input type="file" class="form-control rounded-4 file" onchange="img_change()" id="change">
+                        <label for="change" class="d-flex align-items-center gap-3">
+                            <img id="change_avatar" src="" alt="qwertyuio">
+                            <label for="change" id="change_btn">change</label>
+
+                        </label>
+
 
                         <div class="row">
                             <div class="col-md-4 col-lg-4 ">
                                 <label class="form-label mb-3" for="add_select">salutation</label>
                                 <select class="form-control form-select mb-3" id="add_select">
-                                    <option selected>select</option>
+                                    <option selected value="select">select</option>
                                     <option value="Mr.">Mr.</option>
                                     <option value="Mrs.">Mrs.</option>
                                     <option value="Miss">Miss</option>
                                 </select>
+                                <span id="erroradd_select"></span>
                             </div>
                             <div class="col-md-4 col-lg-4 mb-3">
                                 <label for="add_firstName" class="form-label mb-3">First Name</label>
                                 <input type="text" class="form-control" id="add_firstName" placeholder="john">
+                                <span id="erroradd_firstName"></span>
                             </div>
                             <div class="col-md-4 col-lg-4 mb-3 ">
                                 <label for="add_secondName" class="form-label mb-3">Last Name</label>
                                 <input type="text" class="form-control" id="add_secondName" placeholder="Doe">
+                                <span id="erroradd_secondName"></span>
                             </div>
                         </div>
                         <div class="row ">
@@ -168,12 +191,14 @@
                                     address</label>
                                 <input type="email" class="form-control rounded-4" id="add_email"
                                     placeholder="sample@gmail.com">
+                                <span id="erroradd_email"></span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <label for="add_number" class="form-label">Mobile
                                     Number</label>
                                 <input type="number" class="form-control rounded-4" id="add_number"
                                     placeholder="Enter your Number">
+                                <span id="erroradd_number"></span>
                             </div>
                         </div>
                         <div class="row ">
@@ -182,23 +207,28 @@
                                     Birth</label>
                                 <input type="date" class="form-control rounded-4 dob" id="add_dob"
                                     placeholder="Select your Birth">
+                                <span id="erroradd_dob"></span>
                             </div>
                             <div class="col-lg-6 col-md-12   ">
                                 <label for="radio" class="form-label mb-4">Gender</label>
                                 <div class="d-flex gap-4 ">
                                     <div class="form-check mb-3 ">
-                                        <input class="form-check-input" type="radio" name="add_gender" value="Male">
+                                        <input class="form-check-input" type="radio" name="add_gender" value="Male"
+                                            id="editMale">
                                         <label class="form-check-label" for="flexRadioDefault1">Male</label>
                                     </div>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" name="add_gender" value="Female">
+                                        <input class="form-check-input" type="radio" name="add_gender" value="Female"
+                                            id="editFemale">
                                         <label class="form-check-label" for="flexRadioDefault2">Female</label>
                                     </div>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" name="add_gender" value="Other">
+                                        <input class="form-check-input" type="radio" name="add_gender" value="Other"
+                                            id="editothers">
                                         <label class="form-check-label" for="flexRadioDefault2">Other</label>
                                     </div>
                                 </div>
+                                <span id="erroradd_gender"></span>
                             </div>
                         </div>
                         <div class="row ">
@@ -207,12 +237,14 @@
                                     User Name</label>
                                 <input type="email" class="form-control rounded-4" id="add_username"
                                     placeholder="User Name">
+                                <span id="erroradd_username"></span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <label for="add_password" class="form-label">
                                     password</label>
                                 <input type="password" class="form-control rounded-4" id="add_password"
                                     placeholder="Enter your password">
+                                <span id="erroradd_password"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -220,6 +252,7 @@
                                 <label for="add_qualification" class="form-label">Qualification</label>
                                 <input type="text" class="form-control d rounded-4" id="add_qualification"
                                     placeholder="Enter Qualification">
+                                <span id="erroradd_qualification"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -227,6 +260,7 @@
                                 <label for="add_address" class="form-label">address</label>
                                 <input type="text" class="form-control d rounded-4" id="add_address"
                                     placeholder="Enter Address">
+                                <span id="erroradd_address"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -238,6 +272,7 @@
                                     <option value="Canada">Canada</option>
                                     <option value="Baharin">Baharin</option>
                                 </select>
+                                <span id="erroradd_country"></span>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label " for="add_State">State</label>
@@ -247,16 +282,19 @@
                                     <option value="Alberta">Tamil nadu</option>
                                     <option value="Quater">Karnataka</option>
                                 </select>
+                                <span id="erroradd_State"></span>
                             </div>
                         </div>
                         <div class="row mt-3 mb-4">
                             <div class="col-lg-6 mb-3">
                                 <label for="add_city" class="form-label">City</label>
                                 <input type="text" class="form-control" id="add_city" placeholder="Enter City">
+                                <span id="erroradd_city"></span>
                             </div>
                             <div class="col-lg-6 ">
                                 <label for="add_pin" class="form-label">Pin/Zip</label>
                                 <input type="text" class="form-control" id="add_pin" placeholder="Enter zip/pin">
+                                <span id="erroradd_pin"></span>
                             </div>
                         </div>
 
@@ -264,8 +302,7 @@
                             <div
                                 class="foot_btn col-lg-12 bg-white rounded-4 py-3  d-flex gap-2 justify-content-end mt-4">
                                 <button type="button" class="btn filled btn-light" onclick="closetag()">Cancel</button>
-                                <button type="button" class="btn unfilled-btn" id="add_employee"
-                                    onclick="addEmployee()"> Add
+                                <button type="button" class="btn unfilled-btn" id="add_employee"> Add
                                     Employee</button>
                                 <button type="button" class="btn unfilled-btn" id="save_change">Save change</button>
                             </div>

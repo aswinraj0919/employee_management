@@ -16,6 +16,12 @@ function openview(id) {
         .then((data) => {
             console.log(data);
 
+            var editImgPreview = document.getElementById('view_emp_img')
+            editImgPreview.src = `http://localhost:3000/employees/${id}/avatar`;
+
+            var editImgPreview = document.getElementById('view_popup_img')
+            editImgPreview.src = `http://localhost:3000/employees/${id}/avatar`;
+
             document.getElementById("view_select").innerHTML = data.salutation
             document.getElementById('view_firstname').innerHTML = data.firstName
             document.getElementById('view_lastname').innerHTML = data.lastName
@@ -23,7 +29,6 @@ function openview(id) {
             document.getElementById('view_gender').innerHTML = data.gender
             document.getElementById('view_phone').innerHTML = data.phone
             document.getElementById('view_Username').innerHTML = data.username
-            document.getElementById('view_age').innerHTML = data.password
             document.getElementById('view_Qualifications').innerHTML = data.qualifications
             document.getElementById('view_address').innerHTML = data.address
             document.getElementById('view_country').innerHTML = data.country
@@ -33,7 +38,11 @@ function openview(id) {
             document.getElementById('view_dob').innerHTML = data.dob
 
 
-
+            var originalDate = data.dob;
+            var parts = originalDate.split("-");
+            var age = 2024 - parts[2]
+            console.log(age);
+            document.getElementById('view_age').innerHTML = age
 
         })
 }
@@ -49,7 +58,8 @@ function overla() {
     back.style.display = "none";
     let closedlt = document.getElementById('deleat_emplayee')
     closedlt.style.visibility = "hidden";
-
+    let view_popup_img = document.getElementById('view_popup_img')
+    view_popup_img.style.display = "none"
 }
 
 
@@ -77,14 +87,48 @@ function viewopenedit(id) {
     variable.style.visibility = "visible";
     let back = document.getElementById('overlay')
     back.style.display = "unset";
+    let uplod = document.getElementById('upload')
+    uplod.style.display = "none";
+    let change = document.getElementById('change_avatar')
+    change.style.display = "block";
+
+    
+
 }
+
+
 let submit = document.getElementById('view_id')
 submit.addEventListener("click", () => {
     editGet(id);
+
+    clearBugOnEdit()
+
 })
 
+function clearBugOnEdit(){
+    document.getElementById("erroradd_dob").textContent = "";
+    document.getElementById("erroradd_gender").textContent = "";
+    document.getElementById("erroradd_number").textContent = "";
+    document.getElementById("erroradd_email").textContent = "";
+    document.getElementById("erroradd_firstName").textContent = "";
+    document.getElementById("erroradd_secondName").textContent = "";
+    document.getElementById("erroradd_password").textContent = "";
+    document.getElementById("erroradd_select").textContent = "";
+    document.getElementById("erroradd_username").textContent = "";
+    document.getElementById("erroradd_address").textContent = "";
+    document.getElementById("erroradd_qualification").textContent = "";
+    document.getElementById("erroradd_country").textContent = "";
+    document.getElementById("erroradd_State").textContent = "";
+    document.getElementById("erroradd_city").textContent = "";
+    document.getElementById("erroradd_pin").textContent = "";
+}
 
 
+
+function img_change() {
+    const clickToChange = document.getElementById('change_avatar')
+    clickToChange.src = URL.createObjectURL(event.target.files[0]);
+}
 
 function editGet(id) {
     console.log(id);
@@ -98,6 +142,10 @@ function editGet(id) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+
+
+            var editImgPreview = document.getElementById('change_avatar')
+            editImgPreview.src = `http://localhost:3000/employees/${data.id}/avatar`;
 
             document.getElementById("add_select").value = data.salutation
             document.getElementById('add_firstName').value = data.firstName
@@ -115,16 +163,28 @@ function editGet(id) {
             document.getElementById('add_pin').value = data.pin
 
 
-            var originalDate = data.dob;
-            var parts = originalDate.split("-");
-            var reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+            let originalDate = data.dob;
+            let parts = originalDate.split("-");
+            let reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
             console.log(reversedDate);
             document.getElementById('add_dob').value = reversedDate
 
 
-            let submit = document.getElementById('save_change')
-            submit.addEventListener("click", () => {
-                saveChanges(id);
+            // let submit = document.getElementById('save_change')
+            // submit.addEventListener("click", () => {
+            //     saveChanges(id);
+            // })
+
+
+            const finishValidationedit = document.getElementById('save_change')
+            finishValidationedit.addEventListener('click', () => {
+                const validations = addFormValidation()
+                if (!validations) {
+                    return;
+                }
+                else {
+                    saveChanges(id)
+                }
             })
         })
 }
@@ -185,6 +245,16 @@ function saveChanges(id) {
         })
         .then(data => {
             console.log("Data posted successfully", data);
+
+            const imgUplode = document.getElementById('change');
+            let imgObject = new FormData();
+
+            imgObject.append("avatar", imgUplode.files[0]);
+
+            fetch(`http://localhost:3000/employees/${id}/avatar`, {
+                method: "POST",
+                body: imgObject,
+            });
         })
 
 
@@ -233,5 +303,153 @@ function confirmDelete(id) {
         })
 }
 
+// popup  img
 
+function img_popup() {
+    let view_popup_img = document.getElementById('view_popup_img')
+    view_popup_img.style.display = "block"
+    let back = document.getElementById('overlay')
+    back.style.display = "unset";
+}
+
+
+
+// validation
+
+function addFormValidation() {
+    const salutation = document.getElementById("add_select").value.trim();
+    const firstName = document.getElementById("add_firstName").value.trim();
+    const lastName = document.getElementById("add_secondName").value.trim();
+    const email = document.getElementById("add_email").value.trim();
+    const phone = document.getElementById("add_number").value.trim();
+    const address = document.getElementById("add_address").value.trim();
+    const country = document.getElementById("add_country").value.trim();
+    const state = document.getElementById("add_State").value.trim();
+    const city = document.getElementById("add_city").value.trim();
+    const pin = document.getElementById("add_pin").value.trim();
+    const username = document.getElementById("add_username").value.trim();
+    const password = document.getElementById("add_password").value.trim();
+    const qualifications = document.getElementById("add_qualification").value.trim();
+
+    // DOB
+
+    const dob = document.getElementById("add_dob")
+    const addDovValidation = document.getElementById('erroradd_dob')
+    const dobvalue = dob.value.trim();
+
+    const gender = document.querySelector('input[name="add_gender"]:checked')
+    const addGenderValidation = document.getElementById('erroradd_gender')
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const phonePattern = /^\d{10}$/
+    const namePattern = /^[A-Za-z]+$/
+
+    let isValid = true;
+
+    // validating DOB and Gender
+
+    if (gender) {
+        addGenderValidation.textContent = ""
+
+    }
+    else {
+        addGenderValidation.textContent = "* please select gender"
+        isValid = false
+    }
+
+    if (dobvalue === "") {
+        addDovValidation.textContent = "* please select Date of Birth"
+        isValid = false
+    }
+
+    // validating rest
+
+    if (!phonePattern.test(phone)) {
+        document.getElementById('erroradd_number').textContent = "* phone number should contain 10n digits"
+        isValid = false
+    }
+
+    if (!emailPattern.test(email)) {
+        document.getElementById('erroradd_email').textContent = "* Invalid email"
+        isValid = false
+    }
+
+    if (!namePattern.test(firstName)) {
+        document.getElementById('erroradd_firstName').textContent = "* please enter first name"
+        isValid = false
+    }
+
+    if (!namePattern.test(lastName)) {
+        document.getElementById('erroradd_secondName').textContent = "* please enter last name"
+        isValid = false
+    }
+
+    if (password == "") {
+        document.getElementById('erroradd_password').textContent = "* please enter password"
+        isValid = false
+    }
+
+    if (salutation == "" || salutation == "select") {
+        document.getElementById('erroradd_select').textContent = "* saluration is needed"
+    }
+
+    if (username == "") {
+        document.getElementById('erroradd_username').textContent = "* username is needed"
+    }
+
+    if (address == "") {
+        document.getElementById('erroradd_address').textContent = "* address is needed"
+    }
+
+    if (qualifications == "") {
+        document.getElementById('erroradd_qualification').textContent = "* qualification is needed"
+
+    }
+
+    if (country == "" || country == "select") {
+        document.getElementById('erroradd_country').textContent = "* country is needed"
+    }
+
+    if (state == "" || state == "select") {
+        document.getElementById('erroradd_State').textContent = "* state is needed"
+    }
+
+    if (city == "" || city == "select") {
+        document.getElementById('erroradd_city').textContent = "* city is needed"
+    }
+
+    if (pin == "") {
+        document.getElementById('erroradd_pin').textContent = "* pin is needed"
+    }
+
+    // validation text event
+
+    document.getElementById('newEmployee').addEventListener('input', (event) => {
+        inputId = event.target.id;
+        const errorId = `error${inputId}`;
+        console.log("error id is ", errorId);
+        document.getElementById(errorId).textContent = "";
+    })
+
+    // gender validation
+
+    const male = document.getElementById("editMale")
+    const female = document.getElementById("editFemale")
+    const others = document.getElementById("editothers")
+
+
+    male.addEventListener("click", () => {
+        document.getElementById("editGenderError").textContent = "";
+    })
+
+    female.addEventListener("click", () => {
+        document.getElementById("editGenderError").textContent = "";
+    })
+
+    others.addEventListener("click", () => {
+        document.getElementById("editGenderError").textContent = "";
+    })
+
+    return isValid;
+}
 

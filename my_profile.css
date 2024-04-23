@@ -149,11 +149,6 @@
     width: 40px;
 }
 
-#table_size {
-    height: 35px;
-    border-radius: 10px;
-}
-
 img {
     width: 100%;
 }
@@ -243,7 +238,7 @@ tbody span:hover {
 
 }
 
-.material-symbols-outlined {
+.material-symbols-outlined{
     cursor: pointer;
 }
 
@@ -308,7 +303,7 @@ tbody span:hover {
 #newEmployee {
     visibility: hidden;
     position: absolute;
-    bottom: -300px;
+    bottom:-300px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -334,7 +329,7 @@ tbody span:hover {
     height: 200px;
 }
 
-.view_btn {
+.view_btn{
     display: flex;
     gap: 20px;
     justify-content: end;
@@ -351,7 +346,7 @@ tbody span:hover {
     justify-content: end;
 }
 
-.dlt_btn a .filled_btn {
+.dlt_btn a .filled_btn { 
     padding: 10px 20px;
 }
 
@@ -361,7 +356,7 @@ tbody span:hover {
     height: 100vh;
 }
 
-.shadow {
+.shadow{
     border-radius: 10px;
 }
 
@@ -372,8 +367,7 @@ tbody span:hover {
     border: solid black 1px;
 
 }
-
-#change_avatar {
+#change_avatar{
     margin: 0;
     border-radius: 13px;
     border: 1px dashed #B2BAD0;
@@ -669,7 +663,7 @@ input .range:focus {
 
 
 
-#view_popup_img {
+#view_popup_img{
     display: none;
     z-index: 2;
     border: 5px solid #fff;

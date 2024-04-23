@@ -30,18 +30,18 @@
                         <div class="divider">
                             <nav class="menu_bar">
                                 <ul>
-                                    <li><a href="">Dashboard</a></li>
+                                    <li><a href="index.html">Dashboard</a></li>
                                     <li><a href="index.html">Employees</a></li>
-                                    <li><a href="">My Profile</a></li>
-                                    <li><a href="">Logout</a></li>
+                                    <li><a href="my_profil.html">My Profile</a></li>
+                                    <li><a href="index.html">Logout</a></li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                     <div class="divider">
                         <div class="main_foot">
-                            <h6>Powered by</h6>
-                            <img src="image 1.png" alt="stackup logo">
+                            <h6>Powered by</h6><a href="https://www.stackuplearning.com/" target="_blank">
+                            <img src="image 1.png" alt="stackup logo"></a>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                     <div class="top ">
                         <div class="main_bar_top">
                             <div class="top_title">
-                                <h6>Dashboard / Employees</h6>
+                                <h6>Dashboard / Employees / Employee Details</h6>
                                 <h3>Employees</h3>
                             </div>
                             <div class="search_section">
@@ -61,7 +61,8 @@
                                     notifications
                                 </span>
                                 <div class="profile_img">
-                                    <img src="Elipse 5.png" alt="profile">
+                                    <a href="my_profil.html">
+                                        <img src="338363.jpg" alt="profile"></a>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +71,7 @@
                             <div class="view_details p-3">
                                 <div class="view_img">
                                     <img class="img_1" src="Background Image (1).png" alt="">
-                                    <img class="img_2" src="Avatar.png" alt="">
+                                    <img id="view_emp_img" src="" alt="" onclick="img_popup()">
                                 </div>
                                 <div class="d-flex flex-column gap-5 p-5">
 
@@ -130,8 +131,8 @@
 
                                 </div>
                                 <div class="view_btn">
-                                    <button type="button" class=" btn filled_btn dlt" onclick="opendelete()"
-                                        >Delete</button>
+                                    <button type="button" class=" btn filled_btn dlt"
+                                        onclick="opendelete()">Delete</button>
                                     <button type="button" class=" btn filled_btn" onclick="viewopenedit()"
                                         id="view_id">Edit Details</button>
                                 </div>
@@ -164,38 +165,41 @@
                 <div id="newEmployee">
                     <div class="card rounded-4  px-3">
                         <header class="header-form ps-2 pt-4 pb-2 d-flex justify-content-sm-between">
-                            <h4 class=" head " id="add_head">Add Employee</h4>
+                            <h4 class=" head " id="add_head">Edit Employee</h4>
                             <span onclick="closetag()" class="material-symbols-outlined">
                                 close
                             </span>
 
                         </header>
-                        <div class="upload text-center my-2 py-3 rounded-3 bg-light mb-4">
-                            <label for="exampleInputfile">
-                                <i class="fa-solid fa-upload"></i>
-                                <input type="file" class="form-control rounded-4 file" id="exampleInputfile">
-                                <h6>Upload Image</h6>
-                                <p>png/jpg files are allowed</p>
-                            </label>
-                        </div>
+
+
+                        <input type="file" class="form-control rounded-4 file" onchange="img_change()" id="change">
+                        <label for="change" class="d-flex align-items-center gap-3">
+                            <img id="change_avatar" src="" alt="qwertyuio">
+                            <label for="change" class="change_btn">change</label>
+
+                        </label>
 
                         <div class="row">
                             <div class="col-md-4 col-lg-4 ">
                                 <label class="form-label mb-3" for="add_select">salutation</label>
                                 <select class="form-control form-select mb-3" id="add_select">
-                                    <option selected>select</option>
+                                    <option selected value="select">select</option>
                                     <option value="Mr.">Mr.</option>
                                     <option value="Mrs.">Mrs.</option>
                                     <option value="Miss">Miss</option>
                                 </select>
+                                <span id="erroradd_select"></span>
                             </div>
                             <div class="col-md-4 col-lg-4 mb-3">
                                 <label for="add_firstName" class="form-label mb-3">First Name</label>
                                 <input type="text" class="form-control" id="add_firstName" placeholder="john">
+                                <span id="erroradd_firstName"></span>
                             </div>
                             <div class="col-md-4 col-lg-4 mb-3 ">
                                 <label for="add_secondName" class="form-label mb-3">Last Name</label>
                                 <input type="text" class="form-control" id="add_secondName" placeholder="Doe">
+                                <span id="erroradd_secondName"></span>
                             </div>
                         </div>
                         <div class="row ">
@@ -204,12 +208,14 @@
                                     address</label>
                                 <input type="email" class="form-control rounded-4" id="add_email"
                                     placeholder="sample@gmail.com">
+                                    <span id="erroradd_email"></span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <label for="add_number" class="form-label">Mobile
                                     Number</label>
                                 <input type="number" class="form-control rounded-4" id="add_number"
                                     placeholder="Enter your Number">
+                                    <span id="erroradd_number"></span>
                             </div>
                         </div>
                         <div class="row ">
@@ -218,23 +224,25 @@
                                     Birth</label>
                                 <input type="date" class="form-control rounded-4 dob" id="add_dob"
                                     placeholder="Select your Birth">
+                                    <span id="erroradd_dob"></span>
                             </div>
                             <div class="col-lg-6 col-md-12   ">
                                 <label for="radio" class="form-label mb-4">Gender</label>
                                 <div class="d-flex gap-4 ">
                                     <div class="form-check mb-3 ">
-                                        <input class="form-check-input" type="radio" name="add_gender" value="Male">
+                                        <input class="form-check-input" type="radio" name="add_gender" value="Male" id="editMale">
                                         <label class="form-check-label" for="flexRadioDefault1">Male</label>
                                     </div>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" name="add_gender" value="Female">
+                                        <input class="form-check-input" type="radio" name="add_gender" value="Female" id="editFemale">
                                         <label class="form-check-label" for="flexRadioDefault2">Female</label>
                                     </div>
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="radio" name="add_gender" value="Other">
+                                        <input class="form-check-input" type="radio" name="add_gender" value="Other" id="editothers">
                                         <label class="form-check-label" for="flexRadioDefault2">Other</label>
                                     </div>
                                 </div>
+                                <span id="erroradd_gender"></span>
                             </div>
                         </div>
                         <div class="row ">
@@ -243,12 +251,14 @@
                                     User Name</label>
                                 <input type="email" class="form-control rounded-4" id="add_username"
                                     placeholder="User Name">
+                                    <span id="erroradd_username"></span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <label for="add_password" class="form-label">
                                     password</label>
                                 <input type="password" class="form-control rounded-4" id="add_password"
                                     placeholder="Enter your password">
+                                    <span id="erroradd_password"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -256,6 +266,7 @@
                                 <label for="add_qualification" class="form-label">Qualification</label>
                                 <input type="text" class="form-control d rounded-4" id="add_qualification"
                                     placeholder="Enter Qualification">
+                                    <span id="erroradd_qualification"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -263,6 +274,7 @@
                                 <label for="add_address" class="form-label">address</label>
                                 <input type="text" class="form-control d rounded-4" id="add_address"
                                     placeholder="Enter Address">
+                                    <span id="erroradd_address"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -274,6 +286,7 @@
                                     <option value="Canada">Canada</option>
                                     <option value="Baharin">Baharin</option>
                                 </select>
+                                <span id="erroradd_country"></span>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label " for="add_State">State</label>
@@ -283,19 +296,25 @@
                                     <option value="Alberta">Tamil nadu</option>
                                     <option value="Quater">Karnataka</option>
                                 </select>
+                                <span id="erroradd_State"></span>
                             </div>
                         </div>
                         <div class="row mt-3 mb-4">
                             <div class="col-lg-6 mb-3">
                                 <label for="add_city" class="form-label">City</label>
                                 <input type="text" class="form-control" id="add_city" placeholder="Enter City">
+                                <span id="erroradd_city"></span>
                             </div>
                             <div class="col-lg-6 ">
                                 <label for="add_pin" class="form-label">Pin/Zip</label>
                                 <input type="text" class="form-control" id="add_pin" placeholder="Enter zip/pin">
+                                <span id="erroradd_pin"></span>
                             </div>
                         </div>
 
+
+
+                        
                         <div class=" row last-row me-0 mb-4 ">
                             <div
                                 class="foot_btn col-lg-12 bg-white rounded-4 py-3  d-flex gap-2 justify-content-end mt-4">
@@ -322,11 +341,18 @@
                 <h6>Are you sure you want to delete this employee?</h6>
                 <div class="dlt_btn">
                     <a><button type="button" class=" btn blank" onclick="canceldelete()">Cancel</button></a>
-                    <a href="index.html"><button type="button" class=" btn filled_btn dlt" id="delete">Delete</button></a>
+                    <a href="index.html"><button type="button" class=" btn filled_btn dlt"
+                            id="delete">Delete</button></a>
 
                 </div>
             </div>
-            <div id="overlay" onclick="overla()"></div>
+
+
+            <!-- full img section  -->
+
+            <img id="view_popup_img" src="" alt="">
+
+
 
 
 
