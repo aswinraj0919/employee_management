@@ -21,6 +21,8 @@ function openForm() {
     change.style.display = "none";
     let cng_btn = document.getElementById('change_btn')
     cng_btn.style.display = "none";
+    let div_add_img = document.getElementById('div_add_img')
+    div_add_img.style.display = "none";
 
     clearInput()
 
@@ -89,7 +91,12 @@ function closetag() {
 const finishValidation = document.getElementById('add_employee')
 finishValidation.addEventListener('click', () => {
     const validations = addFormValidation()
-    
+    if (!validations) {
+        return;
+    }
+    else {
+        addEmployee()
+    }    
 })
 
 
@@ -154,7 +161,7 @@ document.getElementById('imgInput').addEventListener('change', function (event) 
             imageElement.src = imageSrc;
 
             const add_avatar = document.getElementById('add_avatar');
-            add_avatar.innerHTML = ''; // Clear previous image, if any
+            add_avatar.innerHTML = '';
             add_avatar.appendChild(imageElement);
         }
 
@@ -227,7 +234,6 @@ function openedit(id) {
     editGet(id);
     clearBugOnEdit()
 }
-
 function clearBugOnEdit(){
     document.getElementById("erroradd_dob").textContent = "";
     document.getElementById("erroradd_gender").textContent = "";
@@ -566,13 +572,10 @@ function displayTablerows(len) {
         <td>${values.country}</td>
         <td> 
             <nav class="edit"> 
-                <input type="checkbox" id="edit_dropdown">
                     <a  class="options">
-                        <label for="edit_dropdown">
                             <span class="material-symbols-outlined">
                             more_horiz
                             </span>
-                        </label>
                     </a>
                 <div class="dropdown">
                     <ul>
@@ -753,15 +756,15 @@ function addFormValidation() {
 
 
     male.addEventListener("click", () => {
-        document.getElementById("editGenderError").textContent = "";
+        document.getElementById("erroradd_gender").textContent = "";
     })
 
     female.addEventListener("click", () => {
-        document.getElementById("editGenderError").textContent = "";
+        document.getElementById("erroradd_gender").textContent = "";
     })
 
     others.addEventListener("click", () => {
-        document.getElementById("editGenderError").textContent = "";
+        document.getElementById("erroradd_gender").textContent = "";
     })
 
     return isValid;

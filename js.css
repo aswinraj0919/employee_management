@@ -222,9 +222,7 @@ tbody span:hover {
     right: 70px;
 }
 
-#edit_dropdown {
-    visibility: hidden;
-}
+
 
 .dropdown ul li a {
     text-decoration: none;
@@ -478,7 +476,6 @@ h6 {
     padding: 10px 20px;
     border-radius: 10px;
     border: solid black 1px;
-
 }
 
 #change_avatar {
@@ -718,4 +715,8 @@ input .range:focus {
     gap: 10px;
     width: 150px;
     display: none;
+}
+
+#newEmployee span{
+    color: red;
 }
