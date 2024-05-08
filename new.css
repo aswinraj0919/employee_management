@@ -1,7 +1,9 @@
 * {
     margin: 0;
-    font-family: Poppins;
     padding: 0;
+    font-family: DM Sans;
+
+
 }
 
 :root {
@@ -15,6 +17,10 @@
     display: grid;
     grid-template-columns: 1fr 5fr;
     height: 100vh;
+}
+
+span{
+    color: red;
 }
 
 
@@ -679,4 +685,46 @@ input .range:focus {
     top: calc(50% - 200px);
     left: calc(50% - 200px);
     height: 400px;
+}
+
+
+
+.popup-content {
+    font-size: 18px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    text-align: center;
+    height: 150px;
+    width: 300px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+
+.tick-mark {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    color: #4CAF50;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }

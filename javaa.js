@@ -170,12 +170,6 @@ function editGet(id) {
             document.getElementById('add_dob').value = reversedDate
 
 
-            // let submit = document.getElementById('save_change')
-            // submit.addEventListener("click", () => {
-            //     saveChanges(id);
-            // })
-
-
             const finishValidationedit = document.getElementById('save_change')
             finishValidationedit.addEventListener('click', () => {
                 const validations = addFormValidation()
@@ -184,10 +178,34 @@ function editGet(id) {
                 }
                 else {
                     saveChanges(id)
+                    closetag()
+                    showPopupToEdit()
                 }
             })
         })
 }
+
+
+function showPopupToEdit() {
+    var popup = document.getElementById('popup');
+    popup.style.display = 'block';
+    document.getElementById('popupMsg').textContent = "Successfully edited!"
+    setTimeout(function () {
+        popup.style.opacity = '1';
+        document.querySelector('.tick-mark').style.opacity = '1';
+    }, 10);
+    setTimeout(hidePopup, 2000);
+}
+
+function hidePopup() {
+    var popup = document.getElementById('popup');
+    popup.style.opacity = '0';
+    document.querySelector('.tick-mark').style.opacity = '0';
+    setTimeout(function () {
+        popup.style.display = 'none';
+    }, 300);
+}
+
 
 function saveChanges(id) {
     const salutation = document.getElementById("add_select").value;
@@ -256,6 +274,9 @@ function saveChanges(id) {
                 body: imgObject,
             });
         })
+        .then(() => {
+            openview(id)
+        })
 
 
 }
@@ -300,6 +321,9 @@ function confirmDelete(id) {
         })
         .then((data) => {
             console.log("delete");
+        })
+        .then(() => {
+            fetchData()
         })
 }
 

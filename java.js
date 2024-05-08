@@ -95,11 +95,30 @@ finishValidation.addEventListener('click', () => {
         return;
     }
     else {
+        closetag()
         addEmployee()
-    }    
+        showPopupToAdd()
+    }
 })
 
+function showPopupToAdd() {
+    var popup = document.getElementById('popup');
+    popup.style.display = 'block';
+    setTimeout(function () {
+        popup.style.opacity = '1';
+        document.querySelector('.tick-mark').style.opacity = '1';
+    }, 10);
+    setTimeout(hidePopup, 2000);
+}
 
+function hidePopup() {
+    var popup = document.getElementById('popup');
+    popup.style.opacity = '0';
+    document.querySelector('.tick-mark').style.opacity = '0';
+    setTimeout(function () {
+        popup.style.display = 'none';
+    }, 300);
+}
 
 function addEmployee() {
     const salutation = document.getElementById("add_select").value;
@@ -197,6 +216,9 @@ function postData(newData) {
                 body: imgObject,
             });
         })
+        .then(() => {
+            fetchData()
+        })
 }
 
 
@@ -234,7 +256,7 @@ function openedit(id) {
     editGet(id);
     clearBugOnEdit()
 }
-function clearBugOnEdit(){
+function clearBugOnEdit() {
     document.getElementById("erroradd_dob").textContent = "";
     document.getElementById("erroradd_gender").textContent = "";
     document.getElementById("erroradd_number").textContent = "";
@@ -311,13 +333,24 @@ function editGet(id) {
                 }
                 else {
                     saveChanges(id)
+                    closetag()
+                    showPopupToEdit()
                 }
             })
 
         })
 
 }
-
+function showPopupToEdit() {
+    var popup = document.getElementById('popup');
+    popup.style.display = 'block';
+    document.getElementById('popupMsg').textContent = "Successfully edited!"
+    setTimeout(function () {
+        popup.style.opacity = '1';
+        document.querySelector('.tick-mark').style.opacity = '1';
+    }, 10);
+    setTimeout(hidePopup, 2000);
+}
 
 
 
@@ -375,6 +408,9 @@ function saveChanges(id) {
         body: JSON.stringify(newData)
     })
         .then(response => {
+            if(!response.ok){
+                console.log("error");
+            }
             return response.json();
         })
         .then(data => {
@@ -391,8 +427,9 @@ function saveChanges(id) {
             });
 
         })
-
-
+        .then(() => {
+            fetchData()
+        })
 }
 
 
@@ -441,6 +478,9 @@ function confirmDelete(id) {
         .then((data) => {
             console.log("delete");
         })
+        .then(() => {
+            fetchData()
+        })
 }
 
 
@@ -465,7 +505,7 @@ function fetchData() {
             return data.json();
         })
         .then((empData) => {
-            rank = empData;
+            rank = empData.reverse();
             console.log(rank);
             const len = empData
             displayIndexButtons(len)
@@ -491,9 +531,9 @@ function preLoadCalculation() {
 function displayIndexButtons(len) {
     preLoadCalculation();
     $(".index_buttons button").remove();
-    $(".index_buttons ").append('<button onclick="prev();"><<</button>');
+    $(".index_buttons ").append('<button class="page-item " onclick="prev();"><<</button>');
     for (var i = 1; i <= max_index; i++) {
-        $(".index_buttons ").append('<button onclick="indexPagenation(' + i + ');" index="' + i + '">' + i + '</button>');
+        $(".index_buttons ").append('<button class="page-link active" onclick="indexPagenation(' + i + ');" index="' + i + '">' + i + '</button>');
     }
     $(".index_buttons ").append('<button onclick="next();">>></button>');
     highlightIndexButton(rank);
@@ -528,9 +568,14 @@ function displayTablerows(len) {
     let as = rank.slice((start_index - 1), end_index)
     console.log(start_index);
     console.log(end_index);
-    let s = start_index;
+    // let s = start_index;
     let tabledata = "";
-
+    if (start_index < 10) {
+        s = "0" + start_index
+    }
+    else {
+        s = start_index
+    }
 
     as.filter((eventData) => {
         if (qurry === '') {
@@ -562,7 +607,7 @@ function displayTablerows(len) {
         }
     }).map((values) => {
         tabledata += `<tr>
-        <th>#${s++}</th>
+        <td>#${s++}</td>
         <td><img class="view_avatar" src="http://localhost:3000/employees/${values.id}/avatar" >
         ${values.salutation} ${values.firstName} ${values.lastName}</td>
         <td>${values.email}</td>
@@ -580,13 +625,14 @@ function displayTablerows(len) {
                 <div class="dropdown">
                     <ul>
                         <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
-                        <li><a onclick="openedit('${values.id}')">Edit</a></li>
+                        <li><a onclick="openedit('${values.id}')" >Edit</a></li>
                         <li><a onclick="opendelete('${values.id}')">Delete</a></li>
                     </ul>
                 </div>
             </nav>
         </td>
         </tr>`
+        
     });
 
     document.getElementById("tbody_table").innerHTML = tabledata;
@@ -597,6 +643,7 @@ function displayTablerows(len) {
 function next() {
     if (current_index < 1) {
         current_index++;
+        console.log("current", current_index);
         highlightIndexButton();
     }
 }

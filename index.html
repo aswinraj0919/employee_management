@@ -70,7 +70,7 @@
                         <div class="p-2">
                             <div class="details">
                                 <div class="details_top">
-                                    <div class="d-flex gap-2 align-items-center">
+                                    <div class="d-flex gap-4 align-items-center">
                                         <h3>Employees List</h3>
                                         <div class="tab_head_container">
                                             <div class="page_limit">
@@ -109,7 +109,7 @@
                     <div>
                         <div>
                             <div class="footer ">
-                                <div class="index_buttons"></div>
+                                <div class="index_buttons pagination pagination-lg"></div>
                             </div>
                         </div>
                         <div class="foot_line">
@@ -144,22 +144,27 @@
                         </header>
                         <input type="file" class="form-control rounded-4 file" id="imgInput">
                         <label for="imgInput">
+
+
                             <div id="div_add_img">
                                 <div id="add_avatar"></div>
                                 <label for="imgInput" id="add_avatar_btn" class="btn filled_btn">change</label>
                             </div>
+
+
                             <div class="text-center my-2 py-3 rounded-3 bg-light mb-4" id="upload">
                                 <i class="fa-solid fa-upload"></i>
                                 <h6>Upload Image</h6>
                                 <p>png/jpg files are allowed</p>
                             </div>
+
+
                         </label>
 
                         <input type="file" class="form-control rounded-4 file" onchange="img_change()" id="change">
                         <label for="change" class="d-flex align-items-center gap-3">
                             <img id="change_avatar" src="" alt="qwertyuio">
                             <label for="change" id="change_btn">change</label>
-
                         </label>
 
 
@@ -311,7 +316,12 @@
                 </div>
             </div>
             <div id="overlay" onclick="overla()"></div>
-
+            <div class="popup-container" id="popup">
+                <div class="popup-content">
+                    <span class="tick-mark">&#10004;</span> <!-- Tick mark icon -->
+                    <p id="popupMsg">Successfully added!</p> <!-- Popup message -->
+                </div>
+            </div>
 
             <!-- deleat page -->
 
