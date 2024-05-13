@@ -50,7 +50,7 @@ function clearInput() {
     });
 
     document.getElementById("erroradd_dob").textContent = "";
-    document.getElementById("erroradd_gender").textContent = "";
+    document.getElementById("errorGender").textContent = "";
     document.getElementById("erroradd_number").textContent = "";
     document.getElementById("erroradd_email").textContent = "";
     document.getElementById("erroradd_firstName").textContent = "";
@@ -102,7 +102,7 @@ finishValidation.addEventListener('click', () => {
 })
 
 function showPopupToAdd() {
-    var popup = document.getElementById('popup');
+    let popup = document.getElementById('popup');
     popup.style.display = 'block';
     setTimeout(function () {
         popup.style.opacity = '1';
@@ -112,7 +112,7 @@ function showPopupToAdd() {
 }
 
 function hidePopup() {
-    var popup = document.getElementById('popup');
+    let popup = document.getElementById('popup');
     popup.style.opacity = '0';
     document.querySelector('.tick-mark').style.opacity = '0';
     setTimeout(function () {
@@ -138,9 +138,9 @@ function addEmployee() {
     const pin = document.getElementById('add_pin').value;
 
 
-    var originalDate = dob;
-    var parts = originalDate.split("-");
-    var reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+    let originalDate = dob;
+    let parts = originalDate.split("-");
+    let reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
     console.log(reversedDate);
 
 
@@ -163,10 +163,8 @@ function addEmployee() {
     }
     console.log(newData);
     postData(newData);
-
-
-
 }
+
 
 document.getElementById('imgInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
@@ -175,12 +173,10 @@ document.getElementById('imgInput').addEventListener('change', function (event) 
         const reader = new FileReader();
 
         reader.onload = function (e) {
-            const imageSrc = e.target.result;
             const imageElement = document.createElement('img');
-            imageElement.src = imageSrc;
+            imageElement.src = e.target.result;
 
             const add_avatar = document.getElementById('add_avatar');
-            add_avatar.innerHTML = '';
             add_avatar.appendChild(imageElement);
         }
 
@@ -258,7 +254,7 @@ function openedit(id) {
 }
 function clearBugOnEdit() {
     document.getElementById("erroradd_dob").textContent = "";
-    document.getElementById("erroradd_gender").textContent = "";
+    document.getElementById("errorGender").textContent = "";
     document.getElementById("erroradd_number").textContent = "";
     document.getElementById("erroradd_email").textContent = "";
     document.getElementById("erroradd_firstName").textContent = "";
@@ -295,7 +291,7 @@ function editGet(id) {
         .then((data) => {
             console.log(data);
 
-            var editImgPreview = document.getElementById('change_avatar')
+            let editImgPreview = document.getElementById('change_avatar')
             editImgPreview.src = `http://localhost:3000/employees/${data.id}/avatar`;
 
             document.getElementById("add_select").value = data.salutation
@@ -314,9 +310,9 @@ function editGet(id) {
             document.getElementById('add_pin').value = data.pin
 
 
-            var originalDate = data.dob;
-            var parts = originalDate.split("-");
-            var reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+            let originalDate = data.dob;
+            let parts = originalDate.split("-");
+            let reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
             console.log(reversedDate);
             document.getElementById('add_dob').value = reversedDate
 
@@ -342,7 +338,7 @@ function editGet(id) {
 
 }
 function showPopupToEdit() {
-    var popup = document.getElementById('popup');
+    let popup = document.getElementById('popup');
     popup.style.display = 'block';
     document.getElementById('popupMsg').textContent = "Successfully edited!"
     setTimeout(function () {
@@ -374,9 +370,9 @@ function saveChanges(id) {
     const pin = document.getElementById('add_pin').value;
 
 
-    var originalDate = dob;
-    var parts = originalDate.split("-");
-    var reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+    let originalDate = dob;
+    let parts = originalDate.split("-");
+    let reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
     console.log(reversedDate);
 
 
@@ -408,7 +404,7 @@ function saveChanges(id) {
         body: JSON.stringify(newData)
     })
         .then(response => {
-            if(!response.ok){
+            if (!response.ok) {
                 console.log("error");
             }
             return response.json();
@@ -463,6 +459,7 @@ function opendelete(id) {
     let dlt = document.getElementById('delete')
     dlt.addEventListener("click", () => {
         confirmDelete(id);
+        canceldelete()
     })
 }
 function confirmDelete(id) {
@@ -483,18 +480,6 @@ function confirmDelete(id) {
         })
 }
 
-
-
-// pagenation
-
-
-var array_length = 0;
-var table_size = 5;
-var start_index = 1;
-var end_index = 0;
-var current_index = 1;
-var max_index = 0;
-
 let rank = [];
 
 fetchData();
@@ -507,12 +492,103 @@ function fetchData() {
         .then((empData) => {
             rank = empData.reverse();
             console.log(rank);
-            const len = empData
-            displayIndexButtons(len)
+            displayIndexButtons()
+
         })
 
 
 }
+
+const search = document.getElementById('filter_text')
+search.addEventListener('input', () => {
+    displayTablerows()
+});
+
+var varidLength=0;
+function displayTablerows() {
+
+
+    let qurry = search.value;
+    console.log("qurry : ", qurry);
+
+    varid = rank.filter((eventData) => {
+                if (qurry === '') {
+                    return eventData
+                }
+                else if (eventData.salutation.toLowerCase().includes(qurry.toLowerCase())) {
+                    return eventData
+                }
+                else if (eventData.firstName.toLowerCase().includes(qurry.toLowerCase())) {
+                    return eventData
+                }
+                else if (eventData.lastName.toLowerCase().includes(qurry.toLowerCase())) {
+                    return eventData
+                }
+                else if (eventData.email.toLowerCase().includes(qurry.toLowerCase())) {
+                    return eventData
+                }
+                else if (eventData.phone.includes(qurry)) {
+                    return eventData
+                }
+                else if (eventData.gender.toLowerCase().includes(qurry.toLowerCase())) {
+                    return eventData
+                }
+                else if (eventData.dob.includes(qurry)) {
+                    return eventData
+                }
+                else if (eventData.country.toLowerCase().includes(qurry.toLowerCase())) {
+                    return eventData
+                }
+            })
+            console.log("varid",varid);
+            varidLength = varid.length;
+
+    let fullDetails = varid.slice((start_index - 1), end_index)
+    let no = start_index;
+    let tabledata = "";
+
+    fullDetails.map((values) => {
+        tabledata += `<tr>
+        <td>#${no++}</td>
+        <td><img class="view_avatar" src="http://localhost:3000/employees/${values.id}/avatar" >
+        ${values.salutation} ${values.firstName} ${values.lastName}</td>
+        <td>${values.email}</td>
+        <td>${values.phone}</td>
+        <td>${values.gender}</td>
+        <td>${values.dob}</td>
+        <td>${values.country}</td>
+        <td> 
+            <nav id="edit"> 
+                    <a  class="options">
+                            <span class="material-symbols-outlined">
+                            more_horiz
+                            </span>
+                    </a>
+                <div id="dropdown">
+                    <ul>
+                        <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
+                        <li><a onclick="openedit('${values.id}')" >Edit</a></li>
+                        <li><a onclick="opendelete('${values.id}')">Delete</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </td>
+        </tr>`
+    });
+
+    document.getElementById("tbody_table").innerHTML = tabledata;
+  
+}
+console.log("variddd",varidLength);
+
+// pagenation
+
+var array_length = 0;
+var table_size = 5;
+var start_index = 1;
+var end_index = 0;
+var current_index = 1;
+var max_index = 0;
 
 
 
@@ -523,131 +599,43 @@ function preLoadCalculation() {
     if ((array_length % table_size) > 0) {
         max_index++;
     }
-
-
 }
 
 
-function displayIndexButtons(len) {
+function displayIndexButtons() {
     preLoadCalculation();
     $(".index_buttons button").remove();
-    $(".index_buttons ").append('<button class="page-item " onclick="prev();"><<</button>');
-    for (var i = 1; i <= max_index; i++) {
-        $(".index_buttons ").append('<button class="page-link active" onclick="indexPagenation(' + i + ');" index="' + i + '">' + i + '</button>');
+    $(".index_buttons ").append('<button class="page-link " onclick="prev();"><<</button>');
+    for (let i = 1; i <= max_index; i++) {
+        $(".index_buttons ").append('<button class="page-item active" onclick="indexPagenation(' + i + ');" index="' + i + '">' + i + '</button>');
     }
-    $(".index_buttons ").append('<button onclick="next();">>></button>');
-    highlightIndexButton(rank);
+    $(".index_buttons ").append('<button class="page-link " onclick="next();">>></button>');
+    highlightIndexButton();
 }
 
-
-
-function highlightIndexButton(len) {
+function highlightIndexButton() {
     start_index = ((current_index - 1) * table_size) + 1;
     end_index = (start_index + table_size) - 1;
     if (end_index > array_length) {
         end_index = array_length;
     }
     $(".page_limit span").text('of  ' + array_length);
-    $(".index-buttons button").removeClass('active');
+    $(".index_buttons button").removeClass('active');
     $(".index_buttons button[index='" + current_index + "']").addClass('active');
 
-    displayTablerows(len);
+    displayTablerows();
 }
-
-const input = document.getElementById('filter_text')
-input.addEventListener('input', () => {
-    displayTablerows(current_index)
-});
-
-function displayTablerows(len) {
-
-    let qurry = input.value;
-    console.log("qurry : ", qurry);
-
-
-    let as = rank.slice((start_index - 1), end_index)
-    console.log(start_index);
-    console.log(end_index);
-    // let s = start_index;
-    let tabledata = "";
-    if (start_index < 10) {
-        s = "0" + start_index
-    }
-    else {
-        s = start_index
-    }
-
-    as.filter((eventData) => {
-        if (qurry === '') {
-            return eventData
-        }
-        else if (eventData.salutation.toLowerCase().includes(qurry.toLowerCase())) {
-            return eventData
-        }
-        else if (eventData.firstName.toLowerCase().includes(qurry.toLowerCase())) {
-            return eventData
-        }
-        else if (eventData.lastName.toLowerCase().includes(qurry.toLowerCase())) {
-            return eventData
-        }
-        else if (eventData.email.toLowerCase().includes(qurry.toLowerCase())) {
-            return eventData
-        }
-        else if (eventData.phone.includes(qurry)) {
-            return eventData
-        }
-        else if (eventData.gender.toLowerCase().includes(qurry.toLowerCase())) {
-            return eventData
-        }
-        else if (eventData.dob.includes(qurry)) {
-            return eventData
-        }
-        else if (eventData.country.toLowerCase().includes(qurry.toLowerCase())) {
-            return eventData
-        }
-    }).map((values) => {
-        tabledata += `<tr>
-        <td>#${s++}</td>
-        <td><img class="view_avatar" src="http://localhost:3000/employees/${values.id}/avatar" >
-        ${values.salutation} ${values.firstName} ${values.lastName}</td>
-        <td>${values.email}</td>
-        <td>${values.phone}</td>
-        <td>${values.gender}</td>
-        <td>${values.dob}</td>
-        <td>${values.country}</td>
-        <td> 
-            <nav class="edit"> 
-                    <a  class="options">
-                            <span class="material-symbols-outlined">
-                            more_horiz
-                            </span>
-                    </a>
-                <div class="dropdown">
-                    <ul>
-                        <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
-                        <li><a onclick="openedit('${values.id}')" >Edit</a></li>
-                        <li><a onclick="opendelete('${values.id}')">Delete</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </td>
-        </tr>`
-        
-    });
-
-    document.getElementById("tbody_table").innerHTML = tabledata;
-
-}
-
 
 function next() {
-    if (current_index < 1) {
+    array_length = rank.length;
+    max = array_length / table_size;
+    if (current_index >= 1 & current_index < max) {
+        console.log("end", end_index);
         current_index++;
         console.log("current", current_index);
         highlightIndexButton();
     }
 }
-
 
 function prev() {
     if (current_index > 1) {
@@ -656,13 +644,10 @@ function prev() {
     }
 }
 
-
 function indexPagenation(index) {
     current_index = parseInt(index);
     highlightIndexButton();
-
 }
-
 
 $("#table_size").change(function () {
     table_size = parseInt($(this).val());
@@ -702,13 +687,13 @@ function addFormValidation() {
     const dobvalue = dob.value.trim();
 
     const gender = document.querySelector('input[name="add_gender"]:checked')
-    const addGenderValidation = document.getElementById('erroradd_gender')
+    const addGenderValidation = document.getElementById('errorGender')
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const phonePattern = /^\d{10}$/
     const namePattern = /^[A-Za-z]+$/
 
-    let isValid = true;
+    let Valid = true;
 
     // validating DOB and Gender
 
@@ -718,82 +703,81 @@ function addFormValidation() {
     }
     else {
         addGenderValidation.textContent = "* please select gender"
-        isValid = false
+        Valid = false
     }
 
     if (dobvalue === "") {
         addDovValidation.textContent = "* please select Date of Birth"
-        isValid = false
+        Valid = false
     }
 
     // validating rest
 
     if (!phonePattern.test(phone)) {
         document.getElementById('erroradd_number').textContent = "* phone number should contain 10n digits"
-        isValid = false
+        Valid = false
     }
 
     if (!emailPattern.test(email)) {
         document.getElementById('erroradd_email').textContent = "* Invalid email"
-        isValid = false
+        Valid = false
     }
 
     if (!namePattern.test(firstName)) {
         document.getElementById('erroradd_firstName').textContent = "* please enter first name"
-        isValid = false
+        Valid = false
     }
 
     if (!namePattern.test(lastName)) {
         document.getElementById('erroradd_secondName').textContent = "* please enter last name"
-        isValid = false
+        Valid = false
     }
 
     if (password == "") {
         document.getElementById('erroradd_password').textContent = "* please enter password"
-        isValid = false
+        Valid = false
     }
 
     if (salutation == "" || salutation == "select") {
         document.getElementById('erroradd_select').textContent = "* saluration is needed"
+        Valid = false
     }
 
     if (username == "") {
         document.getElementById('erroradd_username').textContent = "* username is needed"
+        Valid = false
     }
 
     if (address == "") {
         document.getElementById('erroradd_address').textContent = "* address is needed"
+        Valid = false
     }
 
     if (qualifications == "") {
         document.getElementById('erroradd_qualification').textContent = "* qualification is needed"
+        Valid = false
 
     }
 
     if (country == "" || country == "select") {
         document.getElementById('erroradd_country').textContent = "* country is needed"
+        Valid = false
     }
 
     if (state == "" || state == "select") {
         document.getElementById('erroradd_State').textContent = "* state is needed"
+        Valid = false
     }
 
     if (city == "" || city == "select") {
         document.getElementById('erroradd_city').textContent = "* city is needed"
+        Valid = false
     }
 
     if (pin == "") {
         document.getElementById('erroradd_pin').textContent = "* pin is needed"
+        Valid = false
     }
-
-    // validation text event
-
-    document.getElementById('newEmployee').addEventListener('input', (event) => {
-        inputId = event.target.id;
-        const errorId = `error${inputId}`;
-        console.log("error id is ", errorId);
-        document.getElementById(errorId).textContent = "";
-    })
 
     // gender validation
 
@@ -801,19 +785,31 @@ function addFormValidation() {
     const female = document.getElementById("editFemale")
     const others = document.getElementById("editothers")
 
-
     male.addEventListener("click", () => {
-        document.getElementById("erroradd_gender").textContent = "";
+        document.getElementById("errorGender").textContent = "";
     })
 
     female.addEventListener("click", () => {
-        document.getElementById("erroradd_gender").textContent = "";
+        document.getElementById("errorGender").textContent = "";
     })
 
     others.addEventListener("click", () => {
-        document.getElementById("erroradd_gender").textContent = "";
+        document.getElementById("errorGender").textContent = "";
     })
 
-    return isValid;
+
+
+    // validation text event
+    document.getElementById('newEmployee').addEventListener('input', (event) => {
+        inputId = event.target.id;
+        const errorId = `error${inputId}`;
+        console.log("error id is ", errorId);
+        document.getElementById(errorId).textContent = "";
+    })
+
+
+
+    return Valid;
 }
+
 

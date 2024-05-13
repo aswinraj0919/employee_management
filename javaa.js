@@ -16,11 +16,11 @@ function openview(id) {
         .then((data) => {
             console.log(data);
 
-            var editImgPreview = document.getElementById('view_emp_img')
+            let editImgPreview = document.getElementById('view_emp_img')
             editImgPreview.src = `http://localhost:3000/employees/${id}/avatar`;
 
-            var editImgPreview = document.getElementById('view_popup_img')
-            editImgPreview.src = `http://localhost:3000/employees/${id}/avatar`;
+            let view_popup_img = document.getElementById('view_popup_img')
+            view_popup_img.src = `http://localhost:3000/employees/${id}/avatar`;
 
             document.getElementById("view_select").innerHTML = data.salutation
             document.getElementById('view_firstname').innerHTML = data.firstName
@@ -38,9 +38,10 @@ function openview(id) {
             document.getElementById('view_dob').innerHTML = data.dob
 
 
-            var originalDate = data.dob;
-            var parts = originalDate.split("-");
-            var age = 2024 - parts[2]
+            let originalDate = data.dob;
+            let parts = originalDate.split("-");
+            var currentDate = new Date();
+            let age = currentDate.getFullYear() - parts[2]
             console.log(age);
             document.getElementById('view_age').innerHTML = age
 
@@ -73,11 +74,6 @@ function closetag() {
 
 
 
-
-
-
-
-
 // view => edit
 
 
@@ -92,7 +88,7 @@ function viewopenedit(id) {
     let change = document.getElementById('change_avatar')
     change.style.display = "block";
 
-    
+
 
 }
 
@@ -105,7 +101,7 @@ submit.addEventListener("click", () => {
 
 })
 
-function clearBugOnEdit(){
+function clearBugOnEdit() {
     document.getElementById("erroradd_dob").textContent = "";
     document.getElementById("erroradd_gender").textContent = "";
     document.getElementById("erroradd_number").textContent = "";
@@ -144,7 +140,7 @@ function editGet(id) {
             console.log(data);
 
 
-            var editImgPreview = document.getElementById('change_avatar')
+            let editImgPreview = document.getElementById('change_avatar')
             editImgPreview.src = `http://localhost:3000/employees/${data.id}/avatar`;
 
             document.getElementById("add_select").value = data.salutation
@@ -187,7 +183,7 @@ function editGet(id) {
 
 
 function showPopupToEdit() {
-    var popup = document.getElementById('popup');
+    let popup = document.getElementById('popup');
     popup.style.display = 'block';
     document.getElementById('popupMsg').textContent = "Successfully edited!"
     setTimeout(function () {
@@ -198,7 +194,7 @@ function showPopupToEdit() {
 }
 
 function hidePopup() {
-    var popup = document.getElementById('popup');
+    let popup = document.getElementById('popup');
     popup.style.opacity = '0';
     document.querySelector('.tick-mark').style.opacity = '0';
     setTimeout(function () {
@@ -225,9 +221,9 @@ function saveChanges(id) {
     const pin = document.getElementById('add_pin').value;
 
 
-    var originalDate = dob;
-    var parts = originalDate.split("-");
-    var reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+    let originalDate = dob;
+    let parts = originalDate.split("-");
+    let reversedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
     console.log(reversedDate);
 
 
@@ -368,7 +364,7 @@ function addFormValidation() {
     const phonePattern = /^\d{10}$/
     const namePattern = /^[A-Za-z]+$/
 
-    let isValid = true;
+    let valid = true;
 
     // validating DOB and Gender
 
@@ -378,72 +374,80 @@ function addFormValidation() {
     }
     else {
         addGenderValidation.textContent = "* please select gender"
-        isValid = false
+        valid = false
     }
 
     if (dobvalue === "") {
         addDovValidation.textContent = "* please select Date of Birth"
-        isValid = false
+        valid = false
     }
 
     // validating rest
 
     if (!phonePattern.test(phone)) {
         document.getElementById('erroradd_number').textContent = "* phone number should contain 10n digits"
-        isValid = false
+        valid = false
     }
 
     if (!emailPattern.test(email)) {
         document.getElementById('erroradd_email').textContent = "* Invalid email"
-        isValid = false
+        valid = false
     }
 
     if (!namePattern.test(firstName)) {
         document.getElementById('erroradd_firstName').textContent = "* please enter first name"
-        isValid = false
+        valid = false
     }
 
     if (!namePattern.test(lastName)) {
         document.getElementById('erroradd_secondName').textContent = "* please enter last name"
-        isValid = false
+        valid = false
     }
 
     if (password == "") {
         document.getElementById('erroradd_password').textContent = "* please enter password"
-        isValid = false
+        valid = false
     }
 
     if (salutation == "" || salutation == "select") {
         document.getElementById('erroradd_select').textContent = "* saluration is needed"
+        valid = false
     }
 
     if (username == "") {
         document.getElementById('erroradd_username').textContent = "* username is needed"
+        valid = false
     }
 
     if (address == "") {
         document.getElementById('erroradd_address').textContent = "* address is needed"
+        valid = false
     }
 
     if (qualifications == "") {
         document.getElementById('erroradd_qualification').textContent = "* qualification is needed"
+        valid = false
 
     }
 
     if (country == "" || country == "select") {
         document.getElementById('erroradd_country').textContent = "* country is needed"
+        valid = false
     }
 
     if (state == "" || state == "select") {
         document.getElementById('erroradd_State').textContent = "* state is needed"
+        valid = false
     }
 
     if (city == "" || city == "select") {
         document.getElementById('erroradd_city').textContent = "* city is needed"
+        valid = false
     }
 
     if (pin == "") {
         document.getElementById('erroradd_pin').textContent = "* pin is needed"
+        valid = false
     }
 
     // validation text event
@@ -474,6 +478,6 @@ function addFormValidation() {
         document.getElementById("editGenderError").textContent = "";
     })
 
-    return isValid;
+    return valid;
 }
 
