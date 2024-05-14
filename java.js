@@ -1,7 +1,21 @@
+// storing the fetched data as array on a variable
+let rank = [];
 
-// add element
+// fetching data from the API
+fetchData();
+function fetchData() {
+    fetch("http://localhost:3000/employees")
+        .then((data) => {
+            return data.json();
+        })
+        .then((empData) => {
+            rank = empData.reverse();
+            displayIndexButtons()
 
+        })
+}
 
+// to open add element form
 function openForm() {
     let variable = document.getElementById('newEmployee')
     variable.style.visibility = "visible";
@@ -23,11 +37,11 @@ function openForm() {
     cng_btn.style.display = "none";
     let div_add_img = document.getElementById('div_add_img')
     div_add_img.style.display = "none";
-
     clearInput()
 
 }
 
+// to clear all the inputes and validation text content 
 function clearInput() {
     document.getElementById("add_select").value = 'select';
     document.getElementById("add_firstName").value = "";
@@ -67,17 +81,17 @@ function clearInput() {
 
 }
 
-function overla() {
-    let variable = document.getElementById('newEmployee')
-    variable.style.visibility = "hidden";
-    let back = document.getElementById('overlay')
-    back.style.display = "none";
-    let closedlt = document.getElementById('deleat_emplayee')
-    closedlt.style.visibility = "hidden";
-
+// cloasing deleat and employe form while clicking on the overlay
+function overlay() {
+    let newEmployee = document.getElementById('newEmployee')
+    newEmployee.style.visibility = "hidden";
+    let overlay = document.getElementById('overlay')
+    overlay.style.display = "none";
+    let deleat_emplayee = document.getElementById('deleat_emplayee')
+    deleat_emplayee.style.visibility = "hidden";
 }
 
-
+// cloasing deleat and employe form while clicking on the cancel or on the close mark
 function closetag() {
     let variable = document.getElementById('newEmployee')
     variable.style.visibility = "hidden";
@@ -88,9 +102,10 @@ function closetag() {
 
 }
 
-const finishValidation = document.getElementById('add_employee')
-finishValidation.addEventListener('click', () => {
-    const validations = addFormValidation()
+// to add the details if the validation is finished
+let add_employee = document.getElementById('add_employee')
+add_employee.addEventListener('click', () => {
+    const validations = FormValidation()
     if (!validations) {
         return;
     }
@@ -101,6 +116,7 @@ finishValidation.addEventListener('click', () => {
     }
 })
 
+// to show a popup msg if the validtion is correct
 function showPopupToAdd() {
     let popup = document.getElementById('popup');
     popup.style.display = 'block';
@@ -111,6 +127,7 @@ function showPopupToAdd() {
     setTimeout(hidePopup, 2000);
 }
 
+// to hide the popup after 2 sec
 function hidePopup() {
     let popup = document.getElementById('popup');
     popup.style.opacity = '0';
@@ -120,6 +137,7 @@ function hidePopup() {
     }, 300);
 }
 
+// to get the input and store it as data
 function addEmployee() {
     const salutation = document.getElementById("add_select").value;
     const firstName = document.getElementById('add_firstName').value;
@@ -165,16 +183,16 @@ function addEmployee() {
     postData(newData);
 }
 
-
+//to display th prive of the img
 document.getElementById('imgInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
 
     if (file) {
         const reader = new FileReader();
 
-        reader.onload = function (e) {
+        reader.onload = function (file) {
             const imageElement = document.createElement('img');
-            imageElement.src = e.target.result;
+            imageElement.src = file.target.result;
 
             const add_avatar = document.getElementById('add_avatar');
             add_avatar.appendChild(imageElement);
@@ -188,6 +206,7 @@ document.getElementById('imgInput').addEventListener('change', function (event) 
     div_add_img.style.display = "flex";
 });
 
+// posting the data 
 function postData(newData) {
     fetch('http://localhost:3000/employees', {
         method: 'POST',
@@ -217,16 +236,7 @@ function postData(newData) {
         })
 }
 
-
-
-
-
-
-// edit section
-
-
-
-
+// to open the edit form
 function openedit(id) {
     let variable = document.getElementById('newEmployee')
     variable.style.visibility = "visible";
@@ -252,6 +262,8 @@ function openedit(id) {
     editGet(id);
     clearBugOnEdit()
 }
+
+//to clear all input and validation textcontent
 function clearBugOnEdit() {
     document.getElementById("erroradd_dob").textContent = "";
     document.getElementById("errorGender").textContent = "";
@@ -270,17 +282,15 @@ function clearBugOnEdit() {
     document.getElementById("erroradd_pin").textContent = "";
 }
 
-
+//to add a new avathar
 function img_change() {
     const clickToChange = document.getElementById('change_avatar')
     clickToChange.src = URL.createObjectURL(event.target.files[0]);
 }
 
+//to get the datas using the id
 function editGet(id) {
     console.log(id);
-
-
-
     fetch(`http://localhost:3000/employees/${id}`, {
         method: 'GET',
         headers: {
@@ -317,13 +327,9 @@ function editGet(id) {
             document.getElementById('add_dob').value = reversedDate
 
 
-            // let submit = document.getElementById('save_change')
-            // submit.addEventListener("click", () => {
-            //     saveChanges(id);
-            // })
             const finishValidationedit = document.getElementById('save_change')
             finishValidationedit.addEventListener('click', () => {
-                const validations = addFormValidation()
+                const validations = FormValidation()
                 if (!validations) {
                     return;
                 }
@@ -333,10 +339,10 @@ function editGet(id) {
                     showPopupToEdit()
                 }
             })
-
         })
-
 }
+
+//to show the popup msg after editing
 function showPopupToEdit() {
     let popup = document.getElementById('popup');
     popup.style.display = 'block';
@@ -348,10 +354,7 @@ function showPopupToEdit() {
     setTimeout(hidePopup, 2000);
 }
 
-
-
-
-
+//to get the edited details on the variablel
 function saveChanges(id) {
     const salutation = document.getElementById("add_select").value;
     const firstName = document.getElementById('add_firstName').value;
@@ -395,7 +398,7 @@ function saveChanges(id) {
     }
     console.log(newData);
 
-
+    //to save the editded details
     fetch(`http://localhost:3000/employees/${id}`, {
         method: 'PUT',
         headers: {
@@ -428,17 +431,17 @@ function saveChanges(id) {
         })
 }
 
+//to open delet section
+function opendelete(id) {
+    let variable = document.getElementById('deleat_emplayee')
+    variable.style.visibility = "visible";
+    let back = document.getElementById('overlay')
+    back.style.display = "unset";
 
+    clickToDeleat(id)
+}
 
-
-
-
-
-
-
-// deleat section
-
-
+//to close dealet section
 function canceldelete() {
     let variable = document.getElementById('deleat_emplayee')
     variable.style.visibility = "hidden";
@@ -447,21 +450,16 @@ function canceldelete() {
 
 }
 
-
-
-
-function opendelete(id) {
-    let variable = document.getElementById('deleat_emplayee')
-    variable.style.visibility = "visible";
-    let back = document.getElementById('overlay')
-    back.style.display = "unset";
-
+//EventListener for clicking
+function clickToDeleat(id) {
     let dlt = document.getElementById('delete')
     dlt.addEventListener("click", () => {
         confirmDelete(id);
         canceldelete()
     })
 }
+
+//delecting the detailes using the id
 function confirmDelete(id) {
     fetch(`http://localhost:3000/employees/${id}`, {
         method: 'DELETE',
@@ -480,73 +478,53 @@ function confirmDelete(id) {
         })
 }
 
-let rank = [];
-
-fetchData();
-function fetchData() {
-    fetch("http://localhost:3000/employees")
-        .then((data) => {
-            console.log(data);
-            return data.json();
-        })
-        .then((empData) => {
-            rank = empData.reverse();
-            console.log(rank);
-            displayIndexButtons()
-
-        })
-
-
-}
-
+//EventListener for search section
 const search = document.getElementById('filter_text')
 search.addEventListener('input', () => {
     displayTablerows()
 });
 
-var varidLength=0;
+//to Display the details and to search data
 function displayTablerows() {
-
 
     let qurry = search.value;
     console.log("qurry : ", qurry);
 
     varid = rank.filter((eventData) => {
-                if (qurry === '') {
-                    return eventData
-                }
-                else if (eventData.salutation.toLowerCase().includes(qurry.toLowerCase())) {
-                    return eventData
-                }
-                else if (eventData.firstName.toLowerCase().includes(qurry.toLowerCase())) {
-                    return eventData
-                }
-                else if (eventData.lastName.toLowerCase().includes(qurry.toLowerCase())) {
-                    return eventData
-                }
-                else if (eventData.email.toLowerCase().includes(qurry.toLowerCase())) {
-                    return eventData
-                }
-                else if (eventData.phone.includes(qurry)) {
-                    return eventData
-                }
-                else if (eventData.gender.toLowerCase().includes(qurry.toLowerCase())) {
-                    return eventData
-                }
-                else if (eventData.dob.includes(qurry)) {
-                    return eventData
-                }
-                else if (eventData.country.toLowerCase().includes(qurry.toLowerCase())) {
-                    return eventData
-                }
-            })
-            console.log("varid",varid);
-            varidLength = varid.length;
+        if (qurry === '') {
+            return eventData
+        }
+        else if (eventData.salutation.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.firstName.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.lastName.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.email.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.phone.includes(qurry)) {
+            return eventData
+        }
+        else if (eventData.gender.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+        else if (eventData.dob.includes(qurry)) {
+            return eventData
+        }
+        else if (eventData.country.toLowerCase().includes(qurry.toLowerCase())) {
+            return eventData
+        }
+    })
+
+
 
     let fullDetails = varid.slice((start_index - 1), end_index)
     let no = start_index;
     let tabledata = "";
-
     fullDetails.map((values) => {
         tabledata += `<tr>
         <td>#${no++}</td>
@@ -575,14 +553,10 @@ function displayTablerows() {
         </td>
         </tr>`
     });
-
     document.getElementById("tbody_table").innerHTML = tabledata;
-  
 }
-console.log("variddd",varidLength);
 
-// pagenation
-
+//diclearing vareables for pagenation
 var array_length = 0;
 var table_size = 5;
 var start_index = 1;
@@ -590,8 +564,7 @@ var end_index = 0;
 var current_index = 1;
 var max_index = 0;
 
-
-
+//to calculate the array length and max index for display pagenation
 function preLoadCalculation() {
     array_length = rank.length;
     console.log("array length " + array_length);
@@ -601,18 +574,22 @@ function preLoadCalculation() {
     }
 }
 
-
+//to display the pagenation button
 function displayIndexButtons() {
     preLoadCalculation();
     $(".index_buttons button").remove();
-    $(".index_buttons ").append('<button class="page-link " onclick="prev();"><<</button>');
+    $(".index_buttons ").append('<button class="page-link " onclick="start();"><<</button>');
+    $(".index_buttons ").append('<button class="page-link " onclick="prev();"><</button>');
     for (let i = 1; i <= max_index; i++) {
         $(".index_buttons ").append('<button class="page-item active" onclick="indexPagenation(' + i + ');" index="' + i + '">' + i + '</button>');
     }
-    $(".index_buttons ").append('<button class="page-link " onclick="next();">>></button>');
+    $(".index_buttons ").append('<button class="page-link " onclick="next();">></button>');
+    $(".index_buttons ").append('<button class="page-link " onclick="end();">>></button>');
+
     highlightIndexButton();
 }
 
+//to calculate and make the current page active
 function highlightIndexButton() {
     start_index = ((current_index - 1) * table_size) + 1;
     end_index = (start_index + table_size) - 1;
@@ -626,17 +603,13 @@ function highlightIndexButton() {
     displayTablerows();
 }
 
-function next() {
-    array_length = rank.length;
-    max = array_length / table_size;
-    if (current_index >= 1 & current_index < max) {
-        console.log("end", end_index);
-        current_index++;
-        console.log("current", current_index);
-        highlightIndexButton();
-    }
+//to go to the first page
+function start() {
+    current_index = 1;
+    highlightIndexButton();
 }
 
+//the working of pagenation preves button
 function prev() {
     if (current_index > 1) {
         current_index--;
@@ -644,11 +617,28 @@ function prev() {
     }
 }
 
+//the working of pagenation buttons
 function indexPagenation(index) {
     current_index = parseInt(index);
     highlightIndexButton();
 }
 
+//the working of pagenation next button
+function next() {
+    max = array_length / table_size;
+    if (current_index >= 1 & current_index < max) {
+        current_index++;
+        highlightIndexButton();
+    }
+}
+
+//to go to the end of the page
+function end() {
+    current_index = parseInt(max_index);
+    highlightIndexButton();
+}
+
+//to make the table size value
 $("#table_size").change(function () {
     table_size = parseInt($(this).val());
     current_index = 1;
@@ -656,16 +646,15 @@ $("#table_size").change(function () {
     displayIndexButtons();
 })
 
-$("#tab_filter_btn").click(function () {
+//to return to the first page while searching
+$("#filter_text").click(function () {
     current_index = 1;
     start_index = 1;
     displayIndexButtons();
 })
 
-
-// validation
-
-function addFormValidation() {
+//to make the form valid to use
+function FormValidation() {
     const salutation = document.getElementById("add_select").value.trim();
     const firstName = document.getElementById("add_firstName").value.trim();
     const lastName = document.getElementById("add_secondName").value.trim();
@@ -699,7 +688,6 @@ function addFormValidation() {
 
     if (gender) {
         addGenderValidation.textContent = ""
-
     }
     else {
         addGenderValidation.textContent = "* please select gender"
@@ -711,7 +699,7 @@ function addFormValidation() {
         Valid = false
     }
 
-    // validating rest
+    //to display error msg of the validation
 
     if (!phonePattern.test(phone)) {
         document.getElementById('erroradd_number').textContent = "* phone number should contain 10n digits"
@@ -756,7 +744,6 @@ function addFormValidation() {
     if (qualifications == "") {
         document.getElementById('erroradd_qualification').textContent = "* qualification is needed"
         Valid = false
-
     }
 
     if (country == "" || country == "select") {
@@ -797,9 +784,8 @@ function addFormValidation() {
         document.getElementById("errorGender").textContent = "";
     })
 
+    // to clear the text contend after inputing values
 
-
-    // validation text event
     document.getElementById('newEmployee').addEventListener('input', (event) => {
         inputId = event.target.id;
         const errorId = `error${inputId}`;
@@ -807,9 +793,5 @@ function addFormValidation() {
         document.getElementById(errorId).textContent = "";
     })
 
-
-
     return Valid;
 }
-
-

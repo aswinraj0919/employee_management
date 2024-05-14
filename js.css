@@ -367,6 +367,7 @@ tbody span:hover {
 
 
 #deleat_emplayee {
+    z-index: 2;
     visibility: hidden;
     position: absolute;
     top: calc(50% - 100px);
