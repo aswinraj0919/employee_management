@@ -186,24 +186,18 @@ function addEmployee() {
 //to display th prive of the img
 document.getElementById('imgInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
-
     if (file) {
         const reader = new FileReader();
-
-        reader.onload = function (file) {
-            const imageElement = document.createElement('img');
-            imageElement.src = file.target.result;
-
-            const add_avatar = document.getElementById('add_avatar');
-            add_avatar.appendChild(imageElement);
-        }
-
+        reader.onload = file => {
+            const img = document.createElement('img');
+            img.src = file.target.result;
+            document.getElementById('add_avatar').appendChild(img);
+        };
         reader.readAsDataURL(file);
     }
-    let uplod = document.getElementById('upload')
-    uplod.style.display = "none";
-    let div_add_img = document.getElementById('div_add_img')
-    div_add_img.style.display = "flex";
+    document.getElementById('upload').style.display = "none";
+    document.getElementById('div_add_img').style.display = "flex";
+    fetchData()
 });
 
 // posting the data 
@@ -456,6 +450,7 @@ function clickToDeleat(id) {
     dlt.addEventListener("click", () => {
         confirmDelete(id);
         canceldelete()
+        current_index = 1;
     })
 }
 
@@ -482,10 +477,57 @@ function confirmDelete(id) {
 const search = document.getElementById('filter_text')
 search.addEventListener('input', () => {
     displayTablerows()
+    displayIndexButtons()
 });
 
 //to Display the details and to search data
 function displayTablerows() {
+
+    preLoadCalculation()
+
+    let fullDetails = varid.slice((start_index - 1), end_index)
+    let no = start_index;
+    let tabledata = "";
+    fullDetails.map((values) => {
+        tabledata += `<tr>
+        <td>#${no++}</td>
+        <td><img class="view_avatar" src="http://localhost:3000/employees/${values.id}/avatar" >
+        ${values.salutation} ${values.firstName} ${values.lastName}</td>
+        <td>${values.email}</td>
+        <td>${values.phone}</td>
+        <td>${values.gender}</td>
+        <td>${values.dob}</td>
+        <td>${values.country}</td>
+        <td>             
+            <div class="dropdown" >
+                <button id="edit"  class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="material-symbols-outlined">
+                    more_horiz
+                    </span>  
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
+                    <li><a onclick="openedit('${values.id}')" >Edit</a></li>
+                    <li><a onclick="opendelete('${values.id}')">Delete</a></li>
+                </ul>
+            </div>
+        </td>
+        </tr>`
+    });
+    document.getElementById("tbody_table").innerHTML = tabledata;
+    // preLoadCalculation(varid.length)
+}
+
+//diclearing vareables  for pagenation
+var array_length = 0;
+var table_size = 5;
+var start_index = 1;
+var end_index = 0;
+var current_index = 1;
+var max_index = 0;
+
+//to calculate the array length and max index for display pagenation
+function preLoadCalculation() {
 
     let qurry = search.value;
     console.log("qurry : ", qurry);
@@ -520,53 +562,7 @@ function displayTablerows() {
         }
     })
 
-
-
-    let fullDetails = varid.slice((start_index - 1), end_index)
-    let no = start_index;
-    let tabledata = "";
-    fullDetails.map((values) => {
-        tabledata += `<tr>
-        <td>#${no++}</td>
-        <td><img class="view_avatar" src="http://localhost:3000/employees/${values.id}/avatar" >
-        ${values.salutation} ${values.firstName} ${values.lastName}</td>
-        <td>${values.email}</td>
-        <td>${values.phone}</td>
-        <td>${values.gender}</td>
-        <td>${values.dob}</td>
-        <td>${values.country}</td>
-        <td> 
-            <nav id="edit"> 
-                    <a  class="options">
-                            <span class="material-symbols-outlined">
-                            more_horiz
-                            </span>
-                    </a>
-                <div id="dropdown">
-                    <ul>
-                        <li><a onclick="openview('${values.id}')" href="view.html?id=${values.id}">View Details</a></li>
-                        <li><a onclick="openedit('${values.id}')" >Edit</a></li>
-                        <li><a onclick="opendelete('${values.id}')">Delete</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </td>
-        </tr>`
-    });
-    document.getElementById("tbody_table").innerHTML = tabledata;
-}
-
-//diclearing vareables for pagenation
-var array_length = 0;
-var table_size = 5;
-var start_index = 1;
-var end_index = 0;
-var current_index = 1;
-var max_index = 0;
-
-//to calculate the array length and max index for display pagenation
-function preLoadCalculation() {
-    array_length = rank.length;
+    array_length = varid.length;
     console.log("array length " + array_length);
     max_index = array_length / table_size;
     if ((array_length % table_size) > 0) {
@@ -577,6 +573,7 @@ function preLoadCalculation() {
 //to display the pagenation button
 function displayIndexButtons() {
     preLoadCalculation();
+    console.log("max", max_index);
     $(".index_buttons button").remove();
     $(".index_buttons ").append('<button class="page-link " onclick="start();"><<</button>');
     $(".index_buttons ").append('<button class="page-link " onclick="prev();"><</button>');
@@ -599,6 +596,13 @@ function highlightIndexButton() {
     $(".page_limit span").text('of  ' + array_length);
     $(".index_buttons button").removeClass('active');
     $(".index_buttons button[index='" + current_index + "']").addClass('active');
+    if (array_length < 5) {
+        document.getElementById('table_size').style.display = "none";
+        $(".page_limit span").text(array_length  + ' of  ' + array_length + " Datas");
+    }
+    else{
+        document.getElementById('table_size').style.display = "unset";
+    }
 
     displayTablerows();
 }
@@ -625,8 +629,7 @@ function indexPagenation(index) {
 
 //the working of pagenation next button
 function next() {
-    max = array_length / table_size;
-    if (current_index >= 1 & current_index < max) {
+    if (current_index >= 1 & current_index < parseInt(max_index)) {
         current_index++;
         highlightIndexButton();
     }

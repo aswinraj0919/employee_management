@@ -3,7 +3,6 @@ const id = link.searchParams.get("id");
 console.log(id);
 
 openview(id);
-
 function openview(id) {
 
     fetch(`http://localhost:3000/employees/${id}`, {
@@ -96,9 +95,7 @@ function viewopenedit(id) {
 let submit = document.getElementById('view_id')
 submit.addEventListener("click", () => {
     editGet(id);
-
     clearBugOnEdit()
-
 })
 
 function clearBugOnEdit() {
@@ -273,8 +270,6 @@ function saveChanges(id) {
         .then(() => {
             openview(id)
         })
-
-
 }
 
 
@@ -318,9 +313,7 @@ function confirmDelete(id) {
         .then((data) => {
             console.log("delete");
         })
-        .then(() => {
-            fetchData()
-        })
+        
 }
 
 // popup  img

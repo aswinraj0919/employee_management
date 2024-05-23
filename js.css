@@ -262,15 +262,14 @@ tbody span:hover {
     background-color: var(--backgroundcolor);
 }
 
-#edit:hover #dropdown {
-    visibility: visible;
-    opacity: 1;
-    right: 70px;
+#edit {
+    color:#000;
+    background: white;
+    border: 0;
+    padding: 0;
 }
 
-
-
-#dropdown ul li a {
+.dropdown ul li a {
     text-decoration: none;
     color: black;
     cursor: pointer;
@@ -281,7 +280,7 @@ tbody span:hover {
     cursor: pointer;
 }
 
-#dropdown ul li {
+.dropdown ul li {
     padding: 10px;
     display: flex;
     align-items: center;
@@ -289,38 +288,26 @@ tbody span:hover {
     list-style: none;
 }
 
-#dropdown ul {
+.dropdown ul {
     margin: 0;
     padding: 10px;
 }
 
-#dropdown {
-    border-radius: 10px;
-    visibility: hidden;
-    position: absolute;
-    width: fit-content;
-    border: 0.5px solid #D3D8E2;
-    opacity: 0;
-    right: 0;
-    z-index: 999;
-    background-color: var(--primarytextcolor);
-}
-
-#dropdown ul li:nth-child(1)::before {
+.dropdown ul li:nth-child(1)::before {
     content: '\e8f4';
     font-family: Material Symbols Outlined;
     font-size: 15px;
 
 }
 
-#dropdown ul li:nth-child(2)::before {
+.dropdown ul li:nth-child(2)::before {
     content: '\e3c9';
     font-family: Material Symbols Outlined;
     font-size: 15px;
 
 }
 
-#dropdown ul li:nth-child(3)::before {
+.dropdown ul li:nth-child(3)::before {
     content: '\e872';
     font-family: Material Symbols Outlined;
     font-size: 15px;
